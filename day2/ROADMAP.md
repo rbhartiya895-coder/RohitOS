@@ -73,3 +73,29 @@ Build RohitOS into:
 - voice-controlled operating system
 - automation AI
 - futuristic Jarvis-like desktop assistant
+
+## Productivity AI Features
+- Google Drive sync
+- Research assistant
+- AI note generation
+- AI report generation
+- Social media post generation
+
+## Communication Features
+- WhatsApp message handling
+- Notification reading
+- Telegram integration
+- Email assistant
+
+## Security Features
+- Approved application system
+- Permission confirmation layer
+- Voice authentication
+- Safe automation mode
+
+## AI OS Features
+- Continuous listening
+- Wake word system
+- Sleep mode
+- Multi-command workflows
+- Long-term memory

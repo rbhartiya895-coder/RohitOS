@@ -4,7 +4,7 @@ from commands import app_commands
 from commands import file_commands
 from commands import web_commands
 from core import memory
-
+from core import ai_engine
 
 def detect_command(command_text):
 
@@ -84,4 +84,4 @@ def route_command(command_text):
 
     # AI FALLBACK
     else:
-        return "AI temporarily disabled for debugging"
+         return ai_engine.ask_ai(command_text)
