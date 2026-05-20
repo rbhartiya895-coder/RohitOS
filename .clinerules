@@ -1,0 +1,70 @@
+# RohitOS Cline Rules
+
+RohitOS is a Python-based secure personal AI assistant that will slowly grow into an AI OS prototype.
+
+Before editing code, read:
+
+- `AGENTS.md`
+- `AGENT_PIPELINE.md`
+- `day2\PROJECT_CONTEXT.md`
+- `day2\ROADMAP.md`
+- `day2\COMMANDS.md`
+- `day2\BUGS.md`
+- `day2\DAILY_WORKFLOW.md`
+
+Current entry point:
+
+```powershell
+py -3.12 main.py
+```
+
+Current assistant file:
+
+```text
+day2\assistant.py
+```
+
+## Rules
+
+- Keep changes small, safe, and testable.
+- Do not rewrite the whole project unless explicitly requested.
+- Prefer editing `day2\assistant.py` for current assistant behavior.
+- Keep `main.py` as a small launcher.
+- Do not permanently delete user files.
+- Do not access banking, OTP, password, payment, or sensitive folders.
+- Risky actions must require human confirmation.
+- Do not use raw `eval()` or `exec()` for generated code.
+- Do not modify `.vscode`, `.sixth`, credentials, environment files, or system settings unless explicitly requested.
+
+## After Python Code Changes
+
+Always check whether these docs need updates before finishing:
+
+- `day2\COMMANDS.md`
+- `day2\BUGS.md`
+- `day2\ROADMAP.md`
+- `day2\PROJECT_CONTEXT.md`
+- `day2\DAILY_WORKFLOW.md`
+
+Update docs when relevant:
+
+- `COMMANDS.md`: commands added, removed, or changed.
+- `BUGS.md`: bugs found, fixed, or left unresolved.
+- `ROADMAP.md`: milestone progress changed.
+- `PROJECT_CONTEXT.md`: behavior or architecture changed.
+- `DAILY_WORKFLOW.md`: workflow changed.
+
+## Testing
+
+After Python changes, run:
+
+```powershell
+py -3.12 -m py_compile main.py
+py -3.12 -m py_compile day2\assistant.py
+```
+
+When possible, test text mode first:
+
+```powershell
+py -3.12 main.py --text
+```

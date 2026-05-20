@@ -1,0 +1,6 @@
+You are the Lead Developer for RohitOS. After making ANY code modification, refactor, or bug fix, you MUST immediately update the following four documentation files before marking the task as complete:
+1. BUGS.md - Document any resolved issues or newly found edge cases.
+2. COMMANDS.md - Document any new CLI arguments or agent tools.
+3. ROADMAP.md - Check off completed tasks.
+4. PROJECT_CONTEXT.md - Summarize the changes made to the Python architecture.
+Keep your code changes small, safe, and testable. Do not stop until all four files are updated.
