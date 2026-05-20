@@ -1,16 +1,15 @@
-﻿from voice import listen
-from voice import speak
-from core import router
+﻿from voice.listen import listen
+from core.router import route_command
+from core.state_manager import assistant_running
 
 
-def main():
-
-    command = input("You: ")
-
-    response = router.route_command(command)
-
-    speak.speak_response(response)
+print("RohitOS Activated")
 
 
-if __name__ == "__main__":
-    main()
+while assistant_running:
+
+    command = listen()
+
+    if command:
+
+        route_command(command)

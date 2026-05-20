@@ -1,12 +1,34 @@
-# voice/listen.py
-# Handles voice listening and recognition.
+import speech_recognition as sr
 
-import sys
+recognizer = sr.Recognizer()
 
-def listen_for_command():
-    """Listens for a voice command and returns the transcribed text."""
-    # Placeholder for actual voice recognition
-    if "--text" in sys.argv:
-        return input("Enter command (text mode): ")  # For text mode testing
-    else:
-        return "voice command detected" # Placeholder for actual voice input
+
+def listen():
+
+    with sr.Microphone() as source:
+
+        print("Listening...")
+
+        recognizer.adjust_for_ambient_noise(source)
+
+        audio = recognizer.listen(source)
+
+    try:
+
+        text = recognizer.recognize_google(audio)
+
+        print("You said:", text)
+
+        return text.lower()
+
+    except sr.UnknownValueError:
+
+        print("Could not understand audio")
+
+        return ""
+
+    except sr.RequestError:
+
+        print("Speech recognition service unavailable")
+
+        return ""

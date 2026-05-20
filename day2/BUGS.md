@@ -95,3 +95,35 @@ Needs scaling improvements later for:
 - threading
 - AI memory
 - real-time processing
+# RohitOS Known Bugs
+
+bugs = [
+
+    "AI quota exhaustion",
+
+    "Continuous listening not implemented yet",
+
+    "Wake words not added yet",
+
+    "Browser close system not implemented",
+
+    "AI fallback depends on external APIs",
+
+    "Application detection limited",
+
+    "No security permission layer yet"
+
+]
+bugs = [
+
+    {
+        "bug": "AI quota exhaustion",
+        "priority": "HIGH"
+    },
+
+    {
+        "bug": "Wake words not implemented",
+        "priority": "MEDIUM"
+    }
+
+]

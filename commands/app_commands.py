@@ -1,16 +1,58 @@
+# commands/app_commands.py
+
+import subprocess
 import os
 
 
-def open_application(app_name):
+# -----------------------------------
+# OPEN APPLICATIONS
+# -----------------------------------
 
-    app_name = app_name.lower().strip()
+def open_app(app_name):
 
-    if app_name == "calculator":
-        os.system("calc")
-        return "Opened calculator"
+    app_name = app_name.lower()
 
-    elif app_name == "notepad":
-        os.system("notepad")
-        return "Opened notepad"
+    # CALCULATOR
+    if "calculator" in app_name:
 
-    return "Application not found"
+        subprocess.Popen("calc")
+
+        print("Opening Calculator")
+
+    # NOTEPAD
+    elif "notepad" in app_name:
+
+        subprocess.Popen("notepad")
+
+        print("Opening Notepad")
+
+    else:
+
+        print("Application not recognized")
+
+
+# -----------------------------------
+# CLOSE APPLICATIONS
+# -----------------------------------
+
+def close_app(app_name):
+
+    app_name = app_name.lower()
+
+    # CLOSE NOTEPAD
+    if "notepad" in app_name:
+
+        os.system("taskkill /f /im notepad.exe")
+
+        print("Closing Notepad")
+
+    # CLOSE CALCULATOR
+    elif "calculator" in app_name:
+
+        os.system("taskkill /f /im CalculatorApp.exe")
+
+        print("Closing Calculator")
+
+    else:
+
+        print("Application not recognized")

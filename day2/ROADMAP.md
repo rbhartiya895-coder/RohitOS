@@ -99,3 +99,26 @@ Build RohitOS into:
 - Sleep mode
 - Multi-command workflows
 - Long-term memory
+
+# RohitOS Roadmap
+
+## Completed
+- modular router system
+- app commands
+- web commands
+- persistent memory
+- file management
+- AI fallback
+
+## Day 5
+- continuous listening
+- wake words
+- sleep mode
+- state management
+
+## Future
+- plugin system
+- browser automation
+- local AI
+- WhatsApp handling
+- research assistant
