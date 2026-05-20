@@ -59,10 +59,14 @@ Voice-controlled AI assistant built in Python.
 
 # Current Architecture
 
-- Single-file assistant
-- Wake-word based activation
-- Continuous active mode
-- Command execution system
+- Root `main.py` launches the current modular assistant flow
+- `core/router.py` classifies commands and routes them to command modules
+- `commands/app_commands.py` handles app commands
+- `commands/web_commands.py` handles website commands
+- `commands/file_commands.py` handles file commands
+- `core/memory.py` handles simple persistent memory
+- `core/ai_engine.py` handles AI fallback placeholder
+- Wake-word/text input work remains part of the assistant foundation
 
 ---
 

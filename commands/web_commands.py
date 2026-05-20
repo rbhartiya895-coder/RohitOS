@@ -1,8 +1,20 @@
 # commands/web_commands.py
-# Handles commands related to web browsing.
+
+import webbrowser
+
 
 def open_website(url):
-    """Opens the specified URL in a web browser."""
-    print(f"Opening website: {url}")
-    # In a real scenario, you'd use webbrowser.open()
-    return f"Opened {url}"
+
+    websites = {
+        "google": "https://www.google.com",
+        "youtube": "https://www.youtube.com",
+        "github": "https://www.github.com"
+    }
+
+    url = url.lower()
+
+    if url in websites:
+        webbrowser.open(websites[url])
+        return f"Opened {url}"
+
+    return "Website not found"

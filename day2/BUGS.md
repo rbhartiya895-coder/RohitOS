@@ -53,6 +53,13 @@ Possible Fixes:
 
 ---
 
+## Router Command Classification
+- Fixed router logic so file commands like "open folder" are checked before generic app/open commands.
+- Added clearer routing for website commands, app commands, memory commands, and AI fallback.
+- Added safe response for unsupported browser-tab closing instead of accidentally opening the website.
+
+---
+
 # Future Improvements
 
 ## Voice Improvements
