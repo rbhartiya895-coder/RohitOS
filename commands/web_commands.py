@@ -3,18 +3,33 @@
 import webbrowser
 
 
-def open_website(url):
+WEBSITES = {
 
-    websites = {
-        "google": "https://www.google.com",
-        "youtube": "https://www.youtube.com",
-        "github": "https://www.github.com"
-    }
+    "google": "https://www.google.com",
 
-    url = url.lower()
+    "youtube": "https://www.youtube.com",
 
-    if url in websites:
-        webbrowser.open(websites[url])
-        return f"Opened {url}"
+    "github": "https://www.github.com",
 
-    return "Website not found"
+    "chatgpt": "https://chat.openai.com",
+"chat gpt": "https://chat.openai.com",
+
+    "instagram": "https://www.instagram.com",
+
+    "facebook": "https://www.facebook.com"
+}
+
+
+def open_website(site_name):
+
+    site_name = site_name.lower()
+
+    if site_name in WEBSITES:
+
+        webbrowser.open(WEBSITES[site_name])
+
+        print(f"Opening {site_name}")
+
+    else:
+
+        print("Website not recognized")

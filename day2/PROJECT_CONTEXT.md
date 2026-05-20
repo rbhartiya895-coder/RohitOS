@@ -103,4 +103,19 @@ The assistant should:
 - stay silent until wake word
 - continue listening after activation
 - sleep only after stop command
+# RohitOS Project Context
 
+RohitOS is a modular AI assistant prototype built in Python.
+
+Architecture:
+User Input → Router → Command Module → Execution
+
+Current modules:
+- app_commands
+- web_commands
+- file_commands
+- memory
+- ai_engine
+
+Current focus:
+stability and assistant interaction.
