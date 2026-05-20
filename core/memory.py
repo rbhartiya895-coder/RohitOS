@@ -7,13 +7,21 @@ MEMORY_FILE = "data/memory.json"
 
 def _load_memory():
     """Loads memory from the JSON file."""
+    global _cache
+    if _cache is not None:
+        return _cache
     if os.path.exists(MEMORY_FILE):
         with open(MEMORY_FILE, "r") as f:
-            return json.load(f)
-    return {}
+            _cache = json.load(f)
+            return _cache
+    _cache = {}
+    return _cache
+
+_cache = None
 
 def _save_memory(memory):
     """Saves memory to the JSON file."""
+    os.makedirs(os.path.dirname(MEMORY_FILE), exist_ok=True)
     with open(MEMORY_FILE, "w") as f:
         json.dump(memory, f, indent=4)
 

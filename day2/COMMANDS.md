@@ -53,6 +53,13 @@ Examples:
 
 ---
 
+## Memory
+- remember <key> is <value>
+- what is my <key>
+- show memory
+
+---
+
 ## Assistant Control
 - stop listening
 - sleep
