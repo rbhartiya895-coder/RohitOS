@@ -1,118 +1,170 @@
 # RohitOS Daily Workflow
 
-Use this file to keep RohitOS development calm, daily, and practical.
+Purpose:
+Keep RohitOS development organized, stable, and realistic.
 
-## Roles
+---
 
-### ChatGPT
-- Gives the daily learning plan.
-- Explains the concept for the day.
-- Breaks the idea into small features.
-- Helps decide what should be built next.
+# DEVELOPMENT PRINCIPLES
 
-### Codex
-- Edits the real project files.
-- Writes and improves Python code.
-- Debugs errors from the terminal.
-- Tests the code when possible.
-- Updates project docs after changes.
-
-## Daily Rule
-
-Build only one main mission per day.
-
-Good daily mission:
-- Small enough to finish today.
-- Useful for RohitOS.
-- Easy to test.
-- Connected to the roadmap.
+## Core Rule
+Build ONE meaningful feature at a time.
 
 Avoid:
-- Adding too many features at once.
-- Rewriting working code without a reason.
-- Mixing AI, UI, automation, and memory in one day.
+- giant rewrites
+- random feature additions
+- AI-generated chaos
+- mixing multiple systems together
 
-## Daily ChatGPT Prompt
+---
 
-Paste this into ChatGPT each day:
+# DAILY WORKFLOW
 
-```text
-I am building RohitOS, a secure personal AI assistant in Python.
+## Step 1 — Review Context
+Before coding:
+- read PROJECT_CONTEXT.md
+- read ROADMAP.md
+- read BUGS.md
+- check previous session notes
 
-Current status:
-- Voice wake word works
-- Text-to-speech works
-- Website/app opening works
-- Folder create/open/delete works
-- Delete moves folders to RohitOS trash
+---
 
-Give me today's development mission based on this roadmap:
-Day 2: Auto file organization
-Day 3: Google Drive sync
-Day 4: Telegram remote file retrieval
-Day 5: PDF reading and summarization
-Day 6: Browser automation with Playwright
-Day 7: Simple workflow orchestration
+## Step 2 — Decide Daily Mission
+A good mission is:
+- small enough to finish
+- easy to test
+- useful for the assistant
+- connected to roadmap goals
 
-Output in this format:
-1. Today's goal
-2. Why this matters
-3. Features to build, maximum 3
-4. Commands the assistant should understand
-5. Files/modules likely needed
-6. Safety rules
-7. How to test
-8. What I should paste to Codex
-```
+Examples:
+- improve router
+- add memory persistence
+- improve speech handling
 
-## Codex Handoff Format
+---
 
-After ChatGPT gives the plan, paste this to Codex:
+## Step 3 — Architecture First
+Before coding:
+- decide affected modules
+- avoid unnecessary rewrites
+- keep changes isolated
 
-```text
-Today's RohitOS mission:
-<paste ChatGPT's plan here>
+Rule:
+Think first. Generate later.
 
-Please implement this in my project, debug errors, test it, and update docs.
-```
+---
 
-## Codex Work Checklist
+## Step 4 — Build In Small Parts
 
-Codex should do this every coding session:
+Recommended process:
 
-1. Inspect current files before editing.
-2. Make a small plan.
-3. Edit only the needed files.
-4. Keep risky actions protected by confirmation.
-5. Run syntax checks.
-6. Tell what changed.
-7. Tell exactly how to run and test.
+1. plan
+2. build one file
+3. test
+4. debug
+5. continue
 
-## Current Recommended Next Mission
+Never build huge systems in one step.
 
-Day 2: Auto file organization.
+---
 
-Suggested commands:
+# AI WORKFLOW
 
-```text
-jarvis organize downloads
-jarvis organize documents
-jarvis show recent files
-jarvis move pdf files
-jarvis move image files
-```
+## ChatGPT Role
+Use ChatGPT for:
+- architecture
+- planning
+- debugging help
+- code explanation
+- modular code generation
+- roadmap guidance
 
-Safety rules:
-- Only organize approved folders.
-- Never touch banking, password, payment, or private folders.
-- Move files into organized folders, do not permanently delete them.
-- Print every moved file path in the terminal.
+NOT for:
+- blindly generating giant systems
 
-## End Of Day Notes
+---
 
-At the end of each day, update:
+## Local AI Role
+Use local AI tools for:
+- small edits
+- syntax fixes
+- boilerplate
+- comments
+- refactoring help
 
-- `COMMANDS.md` with new commands.
-- `BUGS.md` with problems found.
-- `ROADMAP.md` with completed work.
-- `PROJECT_CONTEXT.md` if the architecture changes.
+Recommended:
+- Ollama
+- Continue.dev
+- DeepSeek Coder
+- Qwen Coder
+
+---
+
+# CODING RULES
+
+## File Rules
+- Keep files small.
+- One responsibility per file.
+- Use readable names.
+- Avoid giant functions.
+
+---
+
+## Safety Rules
+- Never auto-delete important files.
+- Require confirmation for risky actions.
+- Keep backup/rollback possible.
+
+---
+
+## Testing Rules
+After every feature:
+- run manually
+- test edge cases
+- confirm voice still works
+- confirm router still works
+
+---
+
+# DOCUMENTATION RULES
+
+At the end of EVERY coding session update:
+
+## ROADMAP.md
+Update:
+- completed work
+- next targets
+- feature status
+
+---
+
+## BUGS.md
+Update:
+- new bugs
+- bug fixes
+- priorities
+
+---
+
+## COMMANDS.md
+Update:
+- new commands
+- removed commands
+- changed command syntax
+
+---
+
+## PROJECT_CONTEXT.md
+Update ONLY if:
+- architecture changes
+- major systems added
+- folder structure changes
+
+---
+
+# SESSION LOG FORMAT
+
+Create:
+
+```plaintext
+SESSION_LOGS/

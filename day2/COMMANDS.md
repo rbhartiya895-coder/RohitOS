@@ -4,29 +4,47 @@
 
 # Wake Words
 
+Supported:
 - hey jarvis
 - jarvis
 - hey rohit
 - rohit
 
+Future:
+- custom wake words
+- offline wake-word engine
+- hotkey activation
+
 ---
 
-# Current Commands
+# CURRENT COMMANDS
 
-## Greeting
+## Greetings
+STATUS: STABLE
+
+Commands:
 - hello
 - hi
+- good morning
+- good evening
 
 ---
 
 ## Websites
+STATUS: STABLE
+
+Commands:
 - open youtube
 - open google
 - open chatgpt
+- open github
 
 ---
 
-## Apps
+## Applications
+STATUS: STABLE
+
+Commands:
 - open calculator
 - open notepad
 - open vs code
@@ -37,6 +55,9 @@
 ---
 
 ## Folder Management
+STATUS: STABLE
+
+Commands:
 - create folder <name>
 - delete folder <name>
 
@@ -46,14 +67,20 @@ Examples:
 
 ---
 
-## Information
+## Information Commands
+STATUS: STABLE
+
+Commands:
 - time
 - who are you
 - your name
 
 ---
 
-## Memory
+## Memory Commands
+STATUS: IN PROGRESS
+
+Commands:
 - remember <key> is <value>
 - what is my <key>
 - show memory
@@ -61,25 +88,35 @@ Examples:
 ---
 
 ## Assistant Control
-- stop listening
+STATUS: STABLE
+
+Commands:
 - sleep
 - go to sleep
+- stop listening
 - shutdown
 - exit
 
 ---
 
-# Planned Commands
+# PLANNED COMMANDS
 
 ## File Management
+STATUS: FUTURE
+
+Planned:
 - create file
 - delete file
-- move file
 - rename file
+- move file
+- organize downloads
 
 ---
 
 ## System Controls
+STATUS: FUTURE
+
+Planned:
 - shutdown pc
 - restart pc
 - volume up
@@ -89,16 +126,22 @@ Examples:
 ---
 
 ## AI Commands
+STATUS: FUTURE
+
+Planned:
 - answer questions
 - summarize text
-- search internet
 - explain concepts
+- internet search
+- AI conversations
 
 ---
 
-# Future Wake Modes
+## Automation Commands
+STATUS: FUTURE
 
-- passive listening
-- hotkey activation
-- offline wake-word model
-
+Planned:
+- browser automation
+- workflow execution
+- screenshot capture
+- smart desktop control
