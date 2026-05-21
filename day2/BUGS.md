@@ -4,7 +4,7 @@
 
 # HIGH PRIORITY
 
-## AI Quota Exhaustion
+## Gemini Quota Exhaustion
 STATUS: ACTIVE
 
 Problem:
@@ -23,6 +23,63 @@ Future Fix:
 
 ---
 
+## Sleep Command Exits Assistant Fully
+STATUS: ACTIVE
+
+Problem:
+- The 'sleep' command currently terminates the assistant process entirely.
+- Expected behavior is to enter a low-power, inactive state until reactivated.
+
+Possible Fixes:
+- Implement a proper sleep/wake-word reactivation loop.
+- Ensure background listening for wake words while in sleep mode.
+
+---
+
+## Speech Recognition Mistakes
+STATUS: ACTIVE
+
+Problem:
+- Speech recognition frequently misinterprets commands or words.
+- Affects accuracy and user experience.
+
+Possible Fixes:
+- Microphone tuning.
+- Porcupine wake-word engine.
+- Whisper integration.
+- Noise filtering.
+- Improved language models.
+
+---
+
+## Multi-Command Parsing Not Implemented
+STATUS: ACTIVE
+
+Problem:
+- The system can only process one command at a time.
+- Cannot handle complex requests with multiple actions.
+
+Possible Fixes:
+- Implement a command chaining or multi-intent parsing system.
+- Use AI to break down complex requests into sub-commands.
+
+---
+
+## Deprecated Gemini Package Warning
+STATUS: ACTIVE
+
+Problem:
+- The current Gemini package is deprecated, leading to warnings.
+- May cause future compatibility issues.
+
+Possible Fixes:
+- Update to the latest supported Gemini package or alternative.
+- Refactor code to align with new API standards.
+
+---
+
+# MEDIUM PRIORITY
+
 ## Wake Word Reliability
 STATUS: ACTIVE
 
@@ -31,10 +88,10 @@ Problem:
 - Indian accent detection inconsistent.
 
 Possible Fixes:
-- microphone tuning
-- Porcupine wake-word engine
-- Whisper integration
-- noise filtering
+- Microphone tuning.
+- Porcupine wake-word engine.
+- Whisper integration.
+- Noise filtering.
 
 ---
 
@@ -45,13 +102,11 @@ Problem:
 - Delays before command detection.
 
 Possible Fixes:
-- optimize timeout values
-- async listening
-- faster recognition engine
+- Optimize timeout values.
+- Async listening.
+- Faster recognition engine.
 
 ---
-
-# MEDIUM PRIORITY
 
 ## Background Noise Issues
 STATUS: ACTIVE
@@ -60,9 +115,9 @@ Problem:
 - Fan sounds and room noise affect detection.
 
 Possible Fixes:
-- noise suppression
-- better microphone calibration
-- offline speech models
+- Noise suppression.
+- Better microphone calibration.
+- Offline speech models.
 
 ---
 
@@ -73,9 +128,9 @@ Problem:
 - Continuous listening consumes CPU.
 
 Possible Fixes:
-- threading
-- async architecture
-- optimized loops
+- Threading.
+- Async architecture.
+- Optimized loops.
 
 ---
 
@@ -86,9 +141,9 @@ Problem:
 - Speech recognition depends on online APIs.
 
 Possible Fixes:
-- Whisper
-- Vosk
-- offline speech recognition
+- Whisper.
+- Vosk.
+- Offline speech recognition.
 
 ---
 
@@ -101,8 +156,8 @@ Problem:
 - Browser tab closing not fully implemented.
 
 Future Fix:
-- browser automation layer
-- Playwright integration
+- Browser automation layer.
+- Playwright integration.
 
 ---
 
@@ -113,8 +168,8 @@ Problem:
 - Some installed apps are not detected.
 
 Possible Fix:
-- app registry scanning
-- shortcut indexing
+- App registry scanning.
+- Shortcut indexing.
 
 ---
 
@@ -125,19 +180,19 @@ Problem:
 - No security confirmation system yet.
 
 Future Fix:
-- confirmation prompts
-- permission manager
-- safe automation mode
+- Confirmation prompts.
+- Permission manager.
+- Safe automation mode.
 
 ---
 
 # CURRENT ENGINEERING FOCUS
 
 Current priority is:
-1. stability
-2. routing
-3. memory
+1. Stability
+2. Routing
+3. Memory
 4. AI interaction
-5. offline capability
+5. Offline capability
 
 NOT adding advanced automation yet.

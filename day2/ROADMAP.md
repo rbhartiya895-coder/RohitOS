@@ -51,35 +51,48 @@ Completed:
 ---
 
 ### Day 4–5 — Stability Improvements
-STATUS: IN PROGRESS
+STATUS: STABLE
 
 Completed:
 - Improved routing
 - Better command checks
 - Safer browser handling
 - Improved project structure
-
-Still improving:
-- wake-word reliability
-- listening stability
-- AI response system
-- memory handling
+- Wake-word reliability improvements
+- Listening stability enhancements
+- AI response system refinement
+- Memory handling improvements
 
 ---
 
-# 🚧 CURRENT TARGET — DAY 6
+### Day 6 — Core System Refinement
+STATUS: STABLE
+
+Completed:
+- Modular router
+- Memory save/recall
+- AI fallback
+- Local small-talk responses
+- Voice responses
+- App opening/closing
+- Website opening
+- Environment variable support
+- Conversational loop
+
+---
+
+# 🚧 CURRENT TARGET — DAY 7
 
 STATUS: ACTIVE
 
 Main Goal:
-Improve AI interaction and memory stability.
+Enhance core assistant control and student productivity features.
 
 Planned Features:
-- smarter AI fallback
-- better context handling
-- cleaner router logic
-- memory improvements
-- command cleanup
+- Sleep vs stop architecture
+- Wake-word reactivation
+- Startup on Windows boot
+- Student productivity features
 
 Rules:
 - no giant rewrites

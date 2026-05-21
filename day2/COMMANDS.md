@@ -38,6 +38,7 @@ Commands:
 - open google
 - open chatgpt
 - open github
+- open <website name>
 
 ---
 
@@ -51,6 +52,8 @@ Commands:
 - close calculator
 - close notepad
 - close vs code
+- open <app name>
+- close <app name>
 
 ---
 
@@ -78,17 +81,18 @@ Commands:
 ---
 
 ## Memory Commands
-STATUS: IN PROGRESS
+STATUS: STABLE
 
 Commands:
 - remember <key> is <value>
 - what is my <key>
 - show memory
+- forget <key>
 
 ---
 
 ## Assistant Control
-STATUS: STABLE
+STATUS: IN PROGRESS
 
 Commands:
 - sleep
@@ -96,6 +100,7 @@ Commands:
 - stop listening
 - shutdown
 - exit
+- reactivate
 
 ---
 
@@ -110,6 +115,9 @@ Planned:
 - rename file
 - move file
 - organize downloads
+- show recent files
+- move pdf files
+- move image files
 
 ---
 
@@ -122,6 +130,7 @@ Planned:
 - volume up
 - volume down
 - brightness control
+- start on boot
 
 ---
 
@@ -134,6 +143,9 @@ Planned:
 - explain concepts
 - internet search
 - AI conversations
+- grammar correction
+- assignment helper
+- notes system
 
 ---
 
@@ -145,3 +157,17 @@ Planned:
 - workflow execution
 - screenshot capture
 - smart desktop control
+- WhatsApp automation
+
+---
+
+## Productivity Commands
+STATUS: FUTURE
+
+Planned:
+- set reminder
+- show reminders
+- add to do list
+- show to do list
+- schedule event
+- show schedule
