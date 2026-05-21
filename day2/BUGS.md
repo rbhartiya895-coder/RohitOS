@@ -1,129 +1,143 @@
-# RohitOS Known Bugs & Improvements
+# RohitOS Known Bugs
 
 ---
 
-# Current Known Issues
+# HIGH PRIORITY
 
-## Wake Word Sensitivity
-- Sometimes requires loud voice
-- Sometimes misses Indian accent pronunciation
-- Wake words like "Rohit" are less reliable
+## AI Quota Exhaustion
+STATUS: ACTIVE
+
+Problem:
+- External AI services hit usage limits quickly.
+- Development slows due to API restrictions.
+
+Temporary Solution:
+- Use ChatGPT for planning.
+- Keep code modular.
+- Build manually in smaller steps.
+
+Future Fix:
+- Ollama local models
+- OpenRouter fallback
+- Better AI workflow separation
+
+---
+
+## Wake Word Reliability
+STATUS: ACTIVE
+
+Problem:
+- Wake word sometimes misses voice.
+- Indian accent detection inconsistent.
 
 Possible Fixes:
-- Better microphone tuning
-- Offline wake-word model
-- Porcupine AI wake-word engine
+- microphone tuning
+- Porcupine wake-word engine
+- Whisper integration
+- noise filtering
 
 ---
 
 ## Speech Recognition Delay
-- Assistant occasionally pauses before detecting command
+STATUS: ACTIVE
+
+Problem:
+- Delays before command detection.
 
 Possible Fixes:
-- Optimize timeout values
-- Faster recognition engine
+- optimize timeout values
+- async listening
+- faster recognition engine
 
 ---
 
-## Background Noise
-- Fan sounds or room noise can affect recognition
+# MEDIUM PRIORITY
+
+## Background Noise Issues
+STATUS: ACTIVE
+
+Problem:
+- Fan sounds and room noise affect detection.
 
 Possible Fixes:
-- Noise filtering
-- Better microphone calibration
+- noise suppression
+- better microphone calibration
+- offline speech models
 
 ---
 
 ## CPU Usage
-- Continuous listening loop uses CPU constantly
+STATUS: ACTIVE
+
+Problem:
+- Continuous listening consumes CPU.
 
 Possible Fixes:
-- Threading
-- Async architecture
-- Optimized listener engine
+- threading
+- async architecture
+- optimized loops
 
 ---
 
 ## Internet Dependency
-- Speech recognition depends on Google API
+STATUS: ACTIVE
+
+Problem:
+- Speech recognition depends on online APIs.
 
 Possible Fixes:
-- Offline speech recognition
-- Whisper integration
+- Whisper
+- Vosk
+- offline speech recognition
 
 ---
 
-## Router Command Classification
-- Fixed router logic so file commands like "open folder" are checked before generic app/open commands.
-- Added clearer routing for website commands, app commands, memory commands, and AI fallback.
-- Added safe response for unsupported browser-tab closing instead of accidentally opening the website.
+# LOW PRIORITY
+
+## Browser Control Limitations
+STATUS: ACTIVE
+
+Problem:
+- Browser tab closing not fully implemented.
+
+Future Fix:
+- browser automation layer
+- Playwright integration
 
 ---
 
-# Future Improvements
+## Limited Application Detection
+STATUS: ACTIVE
 
-## Voice Improvements
-- Natural voice
-- Female/male voice selection
-- Voice cloning
+Problem:
+- Some installed apps are not detected.
 
----
-
-## AI Improvements
-- ChatGPT integration
-- Memory system
-- Context awareness
+Possible Fix:
+- app registry scanning
+- shortcut indexing
 
 ---
 
-## UI Improvements
-- Jarvis animation
-- Voice waveform
-- Floating assistant window
+## Missing Permission Layer
+STATUS: ACTIVE
+
+Problem:
+- No security confirmation system yet.
+
+Future Fix:
+- confirmation prompts
+- permission manager
+- safe automation mode
 
 ---
 
-# Notes
+# CURRENT ENGINEERING FOCUS
 
-Current assistant architecture is:
-- beginner-friendly
-- modular
-- stable for small projects
+Current priority is:
+1. stability
+2. routing
+3. memory
+4. AI interaction
+5. offline capability
 
-Needs scaling improvements later for:
-- multitasking
-- threading
-- AI memory
-- real-time processing
-# RohitOS Known Bugs
-
-bugs = [
-
-    "AI quota exhaustion",
-
-    "Continuous listening not implemented yet",
-
-    "Wake words not added yet",
-
-    "Browser close system not implemented",
-
-    "AI fallback depends on external APIs",
-
-    "Application detection limited",
-
-    "No security permission layer yet"
-
-]
-bugs = [
-
-    {
-        "bug": "AI quota exhaustion",
-        "priority": "HIGH"
-    },
-
-    {
-        "bug": "Wake words not implemented",
-        "priority": "MEDIUM"
-    }
-
-]
+NOT adding advanced automation yet.

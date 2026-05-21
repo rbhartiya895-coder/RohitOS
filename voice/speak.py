@@ -1,7 +1,30 @@
 # voice/speak.py
-# Handles text-to-speech output.
+# Handles text-to-speech output
 
-def speak_response(text):
-    """Speaks the given text."""
-    print(f"Assistant says: {text}")
-    # Placeholder for actual text-to-speech
+import pyttsx3
+
+
+# -----------------------------------
+# SPEAK FUNCTION
+# -----------------------------------
+
+def speak(text):
+
+    try:
+
+        print(f"RohitOS says: {text}")
+
+        # CREATE NEW ENGINE EACH TIME
+        engine = pyttsx3.init()
+
+        engine.setProperty("rate", 170)
+
+        engine.say(text)
+
+        engine.runAndWait()
+
+        engine.stop()
+
+    except Exception as e:
+
+        print(f"Speech Error: {e}")

@@ -2,19 +2,34 @@
 
 ---
 
-# ✅ COMPLETED
+# PHASE 1 — FOUNDATION
 
-## Day 1
+Goal:
+Build a stable assistant core before advanced AI features.
+
+---
+
+## ✅ COMPLETED
+
+### Day 1 — Setup
+STATUS: STABLE
+
+Completed:
 - Python setup
 - VS Code setup
 - Package installation
 - Project initialization
 
-## Day 2
-- Wake word system
-- Voice recognition
+---
+
+### Day 2 — Voice Assistant Core
+STATUS: STABLE
+
+Completed:
+- Wake-word system
+- Speech recognition
 - Text-to-speech
-- Continuous listening mode
+- Continuous listening
 - Sleep mode
 - Open websites
 - Open apps
@@ -23,102 +38,105 @@
 
 ---
 
-# 🚧 CURRENT GOALS
+### Day 3 — Modular Architecture
+STATUS: STABLE
 
-## Day 3
-- ChatGPT integration
-- AI conversation mode
-- Smarter command routing
-- Internet-based answers
-
----
-
-# 🔥 FUTURE FEATURES
-
-## Assistant Features
-- Memory system
-- Reminder system
-- Voice typing
-- AI personality
-- Multi-language support
-
-## Automation Features
-- Open files
-- Move files
-- Organize folders
-- Screenshot capture
-- Shutdown PC
-- Volume control
-- Brightness control
-
-## AI Features
-- ChatGPT brain
-- Offline AI model
-- AI reasoning
-- Voice cloning
-- AI vision system
-
-## GUI Features
-- Jarvis interface
-- Voice waveform
-- Animated orb
-- System dashboard
+Completed:
+- Router system
+- Command modules
+- Basic memory system
+- AI fallback structure
+- Modular file separation
 
 ---
 
-# 🧠 LONG TERM GOAL
+### Day 4–5 — Stability Improvements
+STATUS: IN PROGRESS
+
+Completed:
+- Improved routing
+- Better command checks
+- Safer browser handling
+- Improved project structure
+
+Still improving:
+- wake-word reliability
+- listening stability
+- AI response system
+- memory handling
+
+---
+
+# 🚧 CURRENT TARGET — DAY 6
+
+STATUS: ACTIVE
+
+Main Goal:
+Improve AI interaction and memory stability.
+
+Planned Features:
+- smarter AI fallback
+- better context handling
+- cleaner router logic
+- memory improvements
+- command cleanup
+
+Rules:
+- no giant rewrites
+- keep architecture modular
+- one stable improvement at a time
+
+---
+
+# PHASE 2 — REAL ASSISTANT EXPERIENCE
+
+STATUS: FUTURE
+
+Features:
+- contextual conversations
+- personality system
+- offline AI support
+- Whisper speech recognition
+- improved TTS
+- async listening
+- command chaining
+
+---
+
+# PHASE 3 — AUTOMATION SYSTEM
+
+STATUS: FUTURE
+
+Features:
+- browser automation
+- workflow engine
+- file organization
+- screenshot system
+- reminder engine
+- automation pipelines
+
+---
+
+# PHASE 4 — ADVANCED AI OS
+
+STATUS: FUTURE
+
+Features:
+- local LLM integration
+- autonomous agents
+- AI vision
+- plugin marketplace
+- multi-agent workflows
+- smart desktop management
+
+---
+
+# LONG-TERM GOAL
 
 Build RohitOS into:
 - personal AI assistant
-- voice-controlled operating system
-- automation AI
-- futuristic Jarvis-like desktop assistant
-
-## Productivity AI Features
-- Google Drive sync
-- Research assistant
-- AI note generation
-- AI report generation
-- Social media post generation
-
-## Communication Features
-- WhatsApp message handling
-- Notification reading
-- Telegram integration
-- Email assistant
-
-## Security Features
-- Approved application system
-- Permission confirmation layer
-- Voice authentication
-- Safe automation mode
-
-## AI OS Features
-- Continuous listening
-- Wake word system
-- Sleep mode
-- Multi-command workflows
-- Long-term memory
-
-# RohitOS Roadmap
-
-## Completed
-- modular router system
-- app commands
-- web commands
-- persistent memory
-- file management
-- AI fallback
-
-## Day 5
-- continuous listening
-- wake words
-- sleep mode
-- state management
-
-## Future
-- plugin system
-- browser automation
-- local AI
-- WhatsApp handling
+- AI productivity OS
+- voice-controlled desktop system
 - research assistant
+- automation engine
+- startup-grade AI prototype

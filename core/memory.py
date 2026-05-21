@@ -1,72 +1,154 @@
 # core/memory.py
-# Persistent memory system for RohitOS.
+# Persistent memory system for RohitOS
 
 import json
 import os
+
+
+# -----------------------------------
+# MEMORY FILE
+# -----------------------------------
 
 MEMORY_FILE = "data/memory.json"
 
 _cache = None
 
 
+# -----------------------------------
+# LOAD MEMORY
+# -----------------------------------
+
 def _load_memory():
-    """Loads memory from the JSON file."""
 
     global _cache
 
+    # USE CACHE IF AVAILABLE
     if _cache is not None:
         return _cache
 
+    # LOAD FILE
     if os.path.exists(MEMORY_FILE):
 
-        with open(MEMORY_FILE, "r") as f:
+        try:
 
-            _cache = json.load(f)
+            with open(MEMORY_FILE, "r") as f:
+
+                _cache = json.load(f)
+
+                return _cache
+
+        except Exception as e:
+
+            print(f"Memory Load Error: {e}")
+
+            _cache = {}
 
             return _cache
 
+    # CREATE EMPTY MEMORY
     _cache = {}
 
     return _cache
 
 
+# -----------------------------------
+# SAVE MEMORY
+# -----------------------------------
+
 def _save_memory(memory):
-    """Saves memory to the JSON file."""
 
-    os.makedirs(os.path.dirname(MEMORY_FILE), exist_ok=True)
+    global _cache
 
-    with open(MEMORY_FILE, "w") as f:
+    try:
 
-        json.dump(memory, f, indent=4)
+        os.makedirs(
+            os.path.dirname(MEMORY_FILE),
+            exist_ok=True
+        )
 
+        with open(MEMORY_FILE, "w") as f:
+
+            json.dump(
+                memory,
+                f,
+                indent=4
+            )
+
+        # UPDATE CACHE
+        _cache = memory
+
+    except Exception as e:
+
+        print(f"Memory Save Error: {e}")
+
+
+# -----------------------------------
+# REMEMBER DATA
+# -----------------------------------
 
 def remember(key, value):
-    """Stores a key-value pair in memory."""
 
     memory = _load_memory()
+
+    key = key.lower().strip()
 
     memory[key] = value
 
     _save_memory(memory)
 
-    return f"I will remember that {key} is {value}"
+    return f"I will remember that your {key} is {value}"
 
+
+# -----------------------------------
+# RECALL DATA
+# -----------------------------------
 
 def recall(key):
-    """Recalls a value associated with a key from memory."""
 
     memory = _load_memory()
+
+    key = key.lower().strip()
 
     if key in memory:
 
         return f"Your {key} is {memory[key]}"
 
-    else:
-
-        return "I don't remember that yet."
+    return "I don't remember that yet."
 
 
-def show_all_memory():
-    """Returns all stored memory."""
+# -----------------------------------
+# SHOW ALL MEMORY
+# -----------------------------------
 
-    return _load_memory()
+def show_memory():
+
+    memory = _load_memory()
+
+    if not memory:
+
+        return "Memory is empty."
+
+    memory_lines = []
+
+    for key, value in memory.items():
+
+        memory_lines.append(
+            f"{key} = {value}"
+        )
+
+    return "\n".join(memory_lines)
+
+
+# -----------------------------------
+# CLEAR MEMORY
+# -----------------------------------
+
+def clear_memory():
+
+    global _cache
+
+    _cache = {}
+
+    _save_memory({})
+
+    return "Memory cleared."
