@@ -5,6 +5,12 @@ from commands import web_commands
 from core import memory
 from core import ai_engine
 
+from core.state_manager import (
+    set_state,
+    SLEEPING,
+    SHUTDOWN
+)
+
 
 # -----------------------------------
 # WEBSITE LIST
@@ -30,20 +36,36 @@ def detect_command(command_text):
     command_text = command_text.lower().strip()
 
     # --------------------------------
-    # STOP / SLEEP COMMANDS
+    # SLEEP COMMANDS
     # --------------------------------
 
-    stop_commands = [
-        "stop",
-        "stop listening",
+    sleep_keywords = [
         "sleep",
         "go to sleep",
-        "exit",
-        "shutdown"
+        "stop listening"
     ]
 
-    if command_text in stop_commands:
-        return "stop_command"
+    for keyword in sleep_keywords:
+
+        if keyword in command_text:
+            return "sleep_command"
+
+    # --------------------------------
+    # SHUTDOWN COMMANDS
+    # --------------------------------
+
+    shutdown_keywords = [
+        "shutdown",
+        "shut down",
+        "stop",
+        "exit",
+        "close yourself"
+    ]
+
+    for keyword in shutdown_keywords:
+
+        if keyword in command_text:
+            return "shutdown_command"
 
     # --------------------------------
     # MEMORY COMMANDS
@@ -99,6 +121,20 @@ def detect_command(command_text):
     # --------------------------------
 
     return "ai_fallback"
+
+
+# -----------------------------------
+# CLEAN MEMORY KEY
+# -----------------------------------
+
+def clean_memory_key(key):
+
+    key = key.lower().strip()
+
+    if key.startswith("my "):
+        key = key.replace("my ", "", 1)
+
+    return key.strip()
 
 
 # -----------------------------------
@@ -167,12 +203,18 @@ def route_command(command_text):
             )[1]
 
             if " is " not in parts:
-                return "Please say memory like: remember name is Rohit"
+
+                return (
+                    "Please say memory like: "
+                    "remember name is Rohit"
+                )
 
             key, value = parts.split(
                 " is ",
                 1
             )
+
+            key = clean_memory_key(key)
 
             return memory.remember(
                 key.strip(),
@@ -196,6 +238,8 @@ def route_command(command_text):
             ""
         ).strip()
 
+        key = clean_memory_key(key)
+
         return memory.recall(key)
 
     # --------------------------------
@@ -204,8 +248,7 @@ def route_command(command_text):
 
     elif command_type == "memory_show":
 
-        return memory.show_memory()
-
+       return str(memory.show_memory()) 
     # --------------------------------
     # CREATE FOLDER
     # --------------------------------
@@ -233,14 +276,28 @@ def route_command(command_text):
         return file_commands.delete_folder(folder_name)
 
     # --------------------------------
-    # STOP COMMANDS
+    # SLEEP COMMANDS
     # --------------------------------
 
-    elif command_type == "stop_command":
+    elif command_type == "sleep_command":
 
         print("RohitOS entering sleep mode...")
 
-        exit()
+        set_state(SLEEPING)
+
+        return "Entering sleep mode."
+
+    # --------------------------------
+    # SHUTDOWN COMMANDS
+    # --------------------------------
+
+    elif command_type == "shutdown_command":
+
+        print("RohitOS shutting down...")
+
+        set_state(SHUTDOWN)
+
+        return "Shutting down RohitOS."
 
     # --------------------------------
     # AI FALLBACK
