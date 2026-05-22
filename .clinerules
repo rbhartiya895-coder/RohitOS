@@ -6,12 +6,11 @@ Before editing code, read:
 
 - `AGENTS.md`
 - `AGENT_PIPELINE.md`
-- `day2\PROJECT_CONTEXT.md`
-- `day2\ROADMAP.md`
-- `day2\COMMANDS.md`
-- `day2\BUGS.md`
-- `day2\DAILY_WORKFLOW.md`
-
+- `PROJECT_CONTEXT.md`
+- `ROADMAP.md`
+- `COMMANDS.md`
+- `BUGS.md`
+- `DAILY_WORKFLOW.md`
 Current entry point:
 
 ```powershell
