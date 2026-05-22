@@ -1,7 +1,7 @@
 from commands import app_commands
 from commands import file_commands
 from commands import web_commands
-
+from commands import search_commands
 from core import memory
 from core import ai_engine
 
@@ -79,7 +79,21 @@ def detect_command(command_text):
 
     if command_text == "show memory":
         return "memory_show"
+    # --------------------------------
+    # SEARCH COMMANDS
+    # --------------------------------
 
+    if (
+        command_text.startswith("search ")
+        and " on google" in command_text
+    ):
+        return "google_search"
+
+    if (
+        command_text.startswith("search ")
+        and " on youtube" in command_text
+    ):
+        return "youtube_search"
     # --------------------------------
     # FILE COMMANDS
     # --------------------------------
@@ -188,7 +202,37 @@ def route_command(command_text):
         ).strip()
 
         return app_commands.close_app(app_name)
+    # --------------------------------
+    # GOOGLE SEARCH
+    # --------------------------------
 
+    elif command_type == "google_search":
+
+        query = command_text.replace(
+            "search ",
+            ""
+        ).replace(
+            " on google",
+            ""
+        ).strip()
+
+        return search_commands.search_google(query)
+
+    # --------------------------------
+    # YOUTUBE SEARCH
+    # --------------------------------
+
+    elif command_type == "youtube_search":
+
+        query = command_text.replace(
+            "search ",
+            ""
+        ).replace(
+            " on youtube",
+            ""
+        ).strip()
+
+        return search_commands.search_youtube(query)
     # --------------------------------
     # MEMORY SAVE
     # --------------------------------
