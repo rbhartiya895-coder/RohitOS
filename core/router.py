@@ -439,6 +439,8 @@ def route_command(command_text):
             "organize ",
             ""
         ).strip()
+        
+        folder_name = strip_fillers(folder_name)
 
         return file_commands.organize_folder(folder_name)
 

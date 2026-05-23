@@ -254,7 +254,7 @@ def move_files_by_type(file_type):
 
     os.makedirs(dest_folder, exist_ok=True)
 
-    sources = ["downloads", "test_files"]
+    sources = SANDBOX_FOLDERS
     moved_count = 0
 
     try:
