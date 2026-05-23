@@ -129,6 +129,19 @@ def detect_command(command_text):
         return "delete_file"
 
     # --------------------------------
+    # FILE ORGANIZATION COMMANDS
+    # --------------------------------
+
+    if command_text.startswith("organize "):
+        return "organize_folder"
+
+    if command_text == "show recent files":
+        return "show_recent_files"
+
+    if command_text.startswith("move ") and command_text.endswith(" files"):
+        return "move_files"
+
+    # --------------------------------
     # WEBSITE COMMANDS
     # --------------------------------
 
@@ -196,6 +209,19 @@ def clean_memory_key(key):
 
 
 # -----------------------------------
+# STRIP FILLERS
+# -----------------------------------
+
+def strip_fillers(name):
+
+    fillers = ["the ", "a ", "an "]
+    for filler in fillers:
+        if name.startswith(filler):
+            return name[len(filler):].strip()
+    return name
+
+
+# -----------------------------------
 # ROUTE COMMAND
 # -----------------------------------
 
@@ -260,6 +286,9 @@ def route_command(command_text):
             ""
         ).strip()
 
+        if not query:
+            return "Please tell me what to search for, like 'search cat on google'."
+
         return search_commands.search_google(query)
 
     # --------------------------------
@@ -275,6 +304,9 @@ def route_command(command_text):
             " on youtube",
             ""
         ).strip()
+
+        if not query:
+            return "Please tell me what to search for, like 'search cat on youtube'."
 
         return search_commands.search_youtube(query)
     # --------------------------------
@@ -347,6 +379,8 @@ def route_command(command_text):
             "create folder ",
             ""
         ).strip()
+        
+        folder_name = strip_fillers(folder_name)
 
         return file_commands.create_folder(folder_name)
 
@@ -360,6 +394,8 @@ def route_command(command_text):
             "delete folder ",
             ""
         ).strip()
+        
+        folder_name = strip_fillers(folder_name)
 
         return file_commands.delete_folder(folder_name)
 
@@ -373,6 +409,8 @@ def route_command(command_text):
             "create file ",
             ""
         ).strip()
+        
+        file_name = strip_fillers(file_name)
 
         return file_commands.create_file(file_name)
 
@@ -386,8 +424,39 @@ def route_command(command_text):
             "delete file ",
             ""
         ).strip()
+        
+        file_name = strip_fillers(file_name)
 
         return file_commands.delete_file(file_name)
+
+    # --------------------------------
+    # FILE ORGANIZATION COMMANDS
+    # --------------------------------
+
+    elif command_type == "organize_folder":
+
+        folder_name = command_text.replace(
+            "organize ",
+            ""
+        ).strip()
+
+        return file_commands.organize_folder(folder_name)
+
+    elif command_type == "show_recent_files":
+
+        return file_commands.show_recent_files()
+
+    elif command_type == "move_files":
+
+        file_type = command_text.replace(
+            "move ",
+            ""
+        ).replace(
+            " files",
+            ""
+        ).strip()
+
+        return file_commands.move_files_by_type(file_type)
 
     # --------------------------------
     # SLEEP COMMANDS

@@ -47,6 +47,7 @@ Completed:
 - Basic memory system
 - AI fallback structure
 - Modular file separation
+- Auto file organization sandbox
 
 ---
 

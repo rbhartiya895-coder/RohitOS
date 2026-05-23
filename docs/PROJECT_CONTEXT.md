@@ -1,4 +1,4 @@
-﻿# PROJECT_CONTEXT.md
+# PROJECT_CONTEXT.md
 
 ````md
 # RohitOS Project Context
@@ -52,6 +52,7 @@ The assistant must remain:
 - Delete folders
 - Basic memory commands
 - Time/info commands
+- File organization (sandbox)
 
 ## Architecture
 - Router-based modular assistant
