@@ -17,18 +17,24 @@ def open_app(app_name):
 
         subprocess.Popen("calc")
 
-        print("Opening Calculator")
+        msg = "Opening Calculator"
+        print(msg)
+        return msg
 
     # NOTEPAD
     elif "notepad" in app_name:
 
         subprocess.Popen("notepad")
 
-        print("Opening Notepad")
+        msg = "Opening Notepad"
+        print(msg)
+        return msg
 
     else:
 
-        print("Application not recognized")
+        msg = "Application not recognized"
+        print(msg)
+        return msg
 
 
 # -----------------------------------
@@ -44,15 +50,21 @@ def close_app(app_name):
 
         os.system("taskkill /f /im notepad.exe")
 
-        print("Closing Notepad")
+        msg = "Closing Notepad"
+        print(msg)
+        return msg
 
     # CLOSE CALCULATOR
     elif "calculator" in app_name:
 
         os.system("taskkill /f /im CalculatorApp.exe")
 
-        print("Closing Calculator")
+        msg = "Closing Calculator"
+        print(msg)
+        return msg
 
     else:
 
-        print("Application not recognized")
+        msg = "Application not recognized"
+        print(msg)
+        return msg

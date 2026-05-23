@@ -1,3 +1,4 @@
+import time
 from commands import app_commands
 from commands import file_commands
 from commands import web_commands
@@ -24,6 +25,23 @@ WEBSITES = [
     "chat gpt",
     "instagram",
     "facebook"
+]
+
+# -----------------------------------
+# COMMAND CONSTANTS
+# -----------------------------------
+
+IDENTITY_PHRASES = [
+    "who are you",
+    "what are you"
+]
+
+VALID_STARTS = [
+    "what", "how", "why", "who", "when", "where",
+    "can", "could", "would", "will", "should",
+    "do", "does", "did", "is", "are", "was", "were",
+    "tell", "explain", "help", "give", "write", "summarize", "translate", "generate",
+    "hello", "hi", "hey", "please"
 ]
 
 
@@ -104,6 +122,12 @@ def detect_command(command_text):
     if command_text.startswith("delete folder "):
         return "delete_folder"
 
+    if command_text.startswith("create file "):
+        return "create_file"
+
+    if command_text.startswith("delete file "):
+        return "delete_file"
+
     # --------------------------------
     # WEBSITE COMMANDS
     # --------------------------------
@@ -127,14 +151,34 @@ def detect_command(command_text):
     # SIMPLE INFO COMMANDS
     # --------------------------------
 
-    if command_text == "time":
+    if command_text in ["time", "what is the time"]:
         return "info_command"
+
+    # --------------------------------
+    # IDENTITY COMMANDS
+    # --------------------------------
+
+    if any(phrase in command_text for phrase in IDENTITY_PHRASES):
+        return "identity_command"
 
     # --------------------------------
     # AI FALLBACK
     # --------------------------------
 
     return "ai_fallback"
+
+
+# -----------------------------------
+# HELPER: VALIDATE GENUINE REQUEST
+# -----------------------------------
+
+def is_genuine_request(command_text):
+
+    for start in VALID_STARTS:
+        if command_text.startswith(start):
+            return True
+
+    return False
 
 
 # -----------------------------------
@@ -320,6 +364,32 @@ def route_command(command_text):
         return file_commands.delete_folder(folder_name)
 
     # --------------------------------
+    # CREATE FILE
+    # --------------------------------
+
+    elif command_type == "create_file":
+
+        file_name = command_text.replace(
+            "create file ",
+            ""
+        ).strip()
+
+        return file_commands.create_file(file_name)
+
+    # --------------------------------
+    # DELETE FILE
+    # --------------------------------
+
+    elif command_type == "delete_file":
+
+        file_name = command_text.replace(
+            "delete file ",
+            ""
+        ).strip()
+
+        return file_commands.delete_file(file_name)
+
+    # --------------------------------
     # SLEEP COMMANDS
     # --------------------------------
 
@@ -344,9 +414,29 @@ def route_command(command_text):
         return "Shutting down RohitOS."
 
     # --------------------------------
+    # SIMPLE INFO COMMANDS
+    # --------------------------------
+
+    elif command_type == "info_command":
+
+        current_time = time.strftime("%I:%M %p")
+        return f"The current time is {current_time}."
+
+    # --------------------------------
+    # IDENTITY COMMANDS
+    # --------------------------------
+
+    elif command_type == "identity_command":
+
+        return "I am RohitOS, your personal AI assistant."
+
+    # --------------------------------
     # AI FALLBACK
     # --------------------------------
 
     else:
+
+        if len(command_text) < 3 or not is_genuine_request(command_text):
+            return "I did not understand that command."
 
         return ai_engine.ask_ai(command_text)
