@@ -66,17 +66,29 @@ Possible Fixes:
 ---
 
 ## Deprecated Gemini Package Warning
-STATUS: ACTIVE
+STATUS: RESOLVED
 
 Problem:
 - The current Gemini package is deprecated, leading to warnings.
 - May cause future compatibility issues.
 
-Possible Fixes:
-- Update to the latest supported Gemini package or alternative.
-- Refactor code to align with new API standards.
+Fix Applied:
+- Updated `core/ai_engine.py` to use `google.genai` SDK and `gemini-1.5-flash`.
 
 ---
+
+## Exposed API Key & Phantom Directory
+STATUS: RESOLVED
+
+Problem:
+- API key was exposed in git history.
+- `commands/core/ai_engine.py` existed as a phantom file.
+
+Fix Applied:
+- Executed `git filter-branch` to scrub history.
+- Deleted phantom directory.
+
+-----
 
 # MEDIUM PRIORITY
 
