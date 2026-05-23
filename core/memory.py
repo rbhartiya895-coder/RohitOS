@@ -128,15 +128,12 @@ def show_memory():
 
         return "Memory is empty."
 
-    memory_lines = []
-
+    print("\n--- SAVED MEMORY ---")
     for key, value in memory.items():
+        print(f"{key}: {value}")
+    print("--------------------\n")
 
-        memory_lines.append(
-            f"{key} = {value}"
-        )
-
-    return "\n".join(memory_lines)
+    return f"You have {len(memory)} saved items in memory."
 
 
 # -----------------------------------

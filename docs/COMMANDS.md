@@ -1,4 +1,4 @@
-﻿# RohitOS Commands
+# RohitOS Commands
 
 ---
 
@@ -70,6 +70,18 @@ Examples:
 
 ---
 
+## File Management
+STATUS: STABLE
+
+Commands:
+- organize downloads
+- organize documents
+- move pdf files
+- move image files
+- show recent files
+
+---
+
 ## Information Commands
 STATUS: STABLE
 
@@ -105,21 +117,6 @@ Commands:
 ---
 
 # PLANNED COMMANDS
-
-## File Management
-STATUS: FUTURE
-
-Planned:
-- create file
-- delete file
-- rename file
-- move file
-- organize downloads
-- show recent files
-- move pdf files
-- move image files
-
----
 
 ## System Controls
 STATUS: FUTURE

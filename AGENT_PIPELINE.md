@@ -10,7 +10,7 @@ Current implementation:
 
 - Root launcher: `main.py`
 - Main assistant code: `day2\assistant.py`
-- Project memory docs: `day2\*.md`
+- Project memory docs: `docs\*.md`
 
 Future direction:
 
@@ -79,21 +79,21 @@ If Cline is used, it must read:
 
 - `.clinerules`
 - `AGENTS.md`
-- `day2\PROJECT_CONTEXT.md`
-- `day2\ROADMAP.md`
-- `day2\COMMANDS.md`
-- `day2\BUGS.md`
-- `day2\DAILY_WORKFLOW.md`
+- `docs\PROJECT_CONTEXT.md`
+- `docs\ROADMAP.md`
+- `docs\COMMANDS.md`
+- `docs\BUGS.md`
+- `docs\DAILY_WORKFLOW.md`
 
 ## Required Docs Update Rule
 
 Whenever any agent changes Python code, it must check whether these files need updates:
 
-- `day2\BUGS.md`
-- `day2\COMMANDS.md`
-- `day2\ROADMAP.md`
-- `day2\PROJECT_CONTEXT.md`
-- `day2\DAILY_WORKFLOW.md`
+- `docs\BUGS.md`
+- `docs\COMMANDS.md`
+- `docs\ROADMAP.md`
+- `docs\PROJECT_CONTEXT.md`
+- `docs\DAILY_WORKFLOW.md`
 
 Update rules:
 
@@ -123,11 +123,11 @@ I am building RohitOS, a Python-based secure personal AI assistant that will gro
 Before coding, read:
 - AGENTS.md
 - AGENT_PIPELINE.md
-- day2\PROJECT_CONTEXT.md
-- day2\ROADMAP.md
-- day2\COMMANDS.md
-- day2\BUGS.md
-- day2\DAILY_WORKFLOW.md
+- docs\PROJECT_CONTEXT.md
+- docs\ROADMAP.md
+- docs\COMMANDS.md
+- docs\BUGS.md
+- docs\DAILY_WORKFLOW.md
 
 Current run command:
 py -3.12 main.py

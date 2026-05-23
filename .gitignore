@@ -2,3 +2,5 @@ __pycache__/
 *.pyc
 .env
 venv/
+rohitos_workspace/
+data/memory.json

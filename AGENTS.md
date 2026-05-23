@@ -13,11 +13,11 @@ RohitOS is a Python-based secure personal AI assistant / AI OS prototype.
 Before coding, read these files:
 
 - `AGENT_PIPELINE.md`
-- `day2\PROJECT_CONTEXT.md`
-- `day2\ROADMAP.md`
-- `day2\COMMANDS.md`
-- `day2\BUGS.md`
-- `day2\DAILY_WORKFLOW.md`
+- `docs\PROJECT_CONTEXT.md`
+- `docs\ROADMAP.md`
+- `docs\COMMANDS.md`
+- `docs\BUGS.md`
+- `docs\DAILY_WORKFLOW.md`
 
 ## Working Rules
 
@@ -77,11 +77,11 @@ py -3.12 main.py
 
 After coding, update project memory:
 
-- Update `day2\COMMANDS.md` when commands change.
-- Update `day2\BUGS.md` when bugs are found or fixed.
-- Update `day2\ROADMAP.md` when a milestone is completed.
-- Update `day2\PROJECT_CONTEXT.md` when architecture or current behavior changes.
-- Update `day2\DAILY_WORKFLOW.md` only when the workflow itself changes.
+- Update `docs\COMMANDS.md` when commands change.
+- Update `docs\BUGS.md` when bugs are found or fixed.
+- Update `docs\ROADMAP.md` when a milestone is completed.
+- Update `docs\PROJECT_CONTEXT.md` when architecture or current behavior changes.
+- Update `docs\DAILY_WORKFLOW.md` only when the workflow itself changes.
 
 ## Current Roadmap
 
