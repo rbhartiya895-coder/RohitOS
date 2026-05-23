@@ -33,11 +33,15 @@ def create_folder(folder_name):
 
         os.makedirs(folder_path, exist_ok=True)
 
-        print(f"Folder '{folder_name}' created successfully")
+        msg = f"Folder '{folder_name}' created successfully"
+        print(msg)
+        return msg
 
     except Exception as e:
 
-        print("Error creating folder:", e)
+        msg = f"Error creating folder: {e}"
+        print(msg)
+        return msg
 
 
 # -----------------------------------
@@ -71,13 +75,81 @@ def delete_folder(folder_name):
                 onerror=remove_readonly
             )
 
-            print(f"Folder '{folder_name}' deleted successfully")
+            msg = f"Folder '{folder_name}' deleted successfully"
+            print(msg)
+            return msg
 
         else:
 
-            print("Folder does not exist")
+            msg = "Folder does not exist"
+            print(msg)
+            return msg
 
     except Exception as e:
 
         print("Error deleting folder:", e)
-        
+        return "Error deleting folder"
+
+
+# -----------------------------------
+# CREATE FILE
+# -----------------------------------
+
+def create_file(file_name):
+
+    if "." not in file_name:
+        file_name += ".txt"
+
+    try:
+
+        file_path = os.path.join(
+            WORKSPACE_PATH,
+            file_name
+        )
+
+        with open(file_path, "w") as f:
+            pass
+
+        msg = f"File '{file_name}' created successfully"
+        print(msg)
+        return msg
+
+    except Exception as e:
+
+        msg = f"Error creating file: {e}"
+        print(msg)
+        return msg
+
+
+# -----------------------------------
+# DELETE FILE
+# -----------------------------------
+
+def delete_file(file_name):
+
+    try:
+
+        file_path = os.path.join(
+            WORKSPACE_PATH,
+            file_name
+        )
+
+        if os.path.exists(file_path):
+
+            os.remove(file_path)
+
+            msg = f"File '{file_name}' deleted successfully"
+            print(msg)
+            return msg
+
+        else:
+
+            msg = "File does not exist"
+            print(msg)
+            return msg
+
+    except Exception as e:
+
+        msg = f"Error deleting file: {e}"
+        print(msg)
+        return msg

@@ -28,8 +28,12 @@ def open_website(site_name):
 
         webbrowser.open(WEBSITES[site_name])
 
-        print(f"Opening {site_name}")
+        msg = f"Opening {site_name}"
+        print(msg)
+        return msg
 
     else:
 
-        print("Website not recognized")
+        msg = "Website not recognized"
+        print(msg)
+        return msg

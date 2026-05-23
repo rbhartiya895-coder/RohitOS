@@ -4,5 +4,8 @@
     "name": "rohit",
     "city": "delhi",
     "my colour": "blue",
-    "favourite colour": "blue"
+    "favourite colour": "blue",
+    "college": "iet",
+    "branch": "cse",
+    "subject": "os"
 }

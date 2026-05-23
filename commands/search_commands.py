@@ -6,11 +6,20 @@ import urllib.parse
 
 
 # -----------------------------------
+# HELPER FUNCTIONS
+# -----------------------------------
+
+def clean_search_query(query):
+    return " ".join(query.split())
+
+
+# -----------------------------------
 # GOOGLE SEARCH
 # -----------------------------------
 
 def search_google(query):
 
+    query = clean_search_query(query)
     encoded_query = urllib.parse.quote(query)
 
     url = (
@@ -31,6 +40,7 @@ def search_google(query):
 
 def search_youtube(query):
 
+    query = clean_search_query(query)
     encoded_query = urllib.parse.quote(query)
 
     url = (
