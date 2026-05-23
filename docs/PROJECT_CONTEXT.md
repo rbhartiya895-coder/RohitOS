@@ -96,10 +96,9 @@ RohitOS/
 │   ├── app_commands.py
 │   ├── web_commands.py
 │   ├── file_commands.py
-│   └── system_commands.py
+│   └── search_commands.py
 │
 ├── data/
-│   ├── memory.json
 │   └── logs/
 │
 ├── docs/
@@ -110,6 +109,8 @@ RohitOS/
 │   └── DAILY_WORKFLOW.md
 │
 └── main.py
+
+Note: `rohitos_workspace/` and `data/memory.json` are excluded via `.gitignore` to protect runtime data.
 ````
 
 ---
