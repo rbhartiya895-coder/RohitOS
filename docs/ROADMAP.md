@@ -82,23 +82,24 @@ Completed:
 
 ---
 
-# 🚧 CURRENT TARGET — DAY 7
+### Day 8 — Runtime Infrastructure
+STATUS: STABLE
+
+Completed:
+- Centralized Runtime States
+- Sleep vs Stop Separation
+- Lower CPU Wake Listener
+- Windows Startup Activation
+- Startup Greeting
+
+---
+
+# 🚧 CURRENT TARGET — DAY 9
 
 STATUS: ACTIVE
 
 Main Goal:
-Enhance core assistant control and student productivity features.
-
-Planned Features:
-- Sleep vs stop architecture
-- Wake-word reactivation
-- Startup on Windows boot
-- Student productivity features
-
-Rules:
-- no giant rewrites
-- keep architecture modular
-- one stable improvement at a time
+Wait for the next module.
 
 ---
 
