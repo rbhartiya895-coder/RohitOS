@@ -1,24 +1,43 @@
-﻿from dotenv import load_dotenv
+import sys
+import time
+from dotenv import load_dotenv
 
 load_dotenv()
 
 from voice.listen import listen
 from voice.speak import speak
-
 from core.router import route_command
-
-from core.state_manager import (
-    get_state,
+from core.startup_manager import run_startup
+from core.runtime_states import (
     is_active,
     is_sleeping,
-    is_shutdown,
+    is_processing,
+    is_stopped,
     set_state,
-    ACTIVE
+    ACTIVE,
+    PROCESSING
 )
 
+# -----------------------------------
+# STARTUP INITIALIZATION
+# -----------------------------------
 
-print("RohitOS Activated")
+if "--startup-delay" in sys.argv:
+    print("Waiting 3 seconds for audio drivers to initialize...")
+    time.sleep(3)
 
+run_startup(speak)
+
+# -----------------------------------
+# WAKE WORDS
+# -----------------------------------
+
+WAKE_WORDS = [
+    "rohit",
+    "jarvis",
+    "friday",
+    "wake up"
+]
 
 # -----------------------------------
 # MAIN LOOP
@@ -26,88 +45,50 @@ print("RohitOS Activated")
 
 while True:
 
-    # --------------------------------
-    # SHUTDOWN CHECK
-    # --------------------------------
-
-    if is_shutdown():
-
+    if is_stopped():
         print("RohitOS Fully Shutdown.")
-
         break
 
-    # --------------------------------
-    # ACTIVE MODE
-    # --------------------------------
+    if is_processing():
+        # Prevents microphone polling while handling a command
+        time.sleep(0.1)
+        continue
 
     if is_active():
 
-        command = listen()
+        command = listen(timeout=5)
 
         if command:
-
+            set_state(PROCESSING)
+            
             response = route_command(command)
 
             if response:
-
                 print(f"RohitOS: {response}")
-
                 speak(response)
 
-    # --------------------------------
-    # SLEEP MODE
-    # --------------------------------
+            # Revert to ACTIVE only if router didn't transition to SLEEP/STOP
+            if is_processing():
+                set_state(ACTIVE)
 
     elif is_sleeping():
 
         print("Waiting for wake word...")
-
-        wake_command = listen()
+        wake_command = listen(timeout=3)
 
         if wake_command:
+            wake_command = wake_command.lower().strip()
+            print(f"Wake Check: {wake_command}")
 
-            wake_command = (
-                wake_command
-                .lower()
-                .strip()
-            )
-
-            print(
-                f"Wake Check: "
-                f"{wake_command}"
-            )
-
-            # ----------------------------
-            # FLEXIBLE WAKE WORDS
-            # ----------------------------
-
-            wake_words = [
-                "rohit",
-                "jarvis",
-                "friday",
-                "wake up"
-            ]
-
-            wake_detected = False
-
-            for wake_word in wake_words:
-
-                if wake_word in wake_command:
-
-                    wake_detected = True
-
-                    break
-
-            # ----------------------------
-            # WAKE ACTIVATION
-            # ----------------------------
+            wake_detected = any(w in wake_command for w in WAKE_WORDS)
 
             if wake_detected:
-
                 set_state(ACTIVE)
-
-                print(
-                    "RohitOS Activated"
-                )
-
+                print("RohitOS Activated")
                 speak("Yes Boss.")
+            else:
+                # Sleep cooldown on incorrect word
+                time.sleep(1.5)
+        else:
+            # Sleep cooldown on silence
+            time.sleep(1.5)
