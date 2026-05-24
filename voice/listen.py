@@ -3,15 +3,18 @@ import speech_recognition as sr
 recognizer = sr.Recognizer()
 
 
-def listen():
+def listen(timeout=5):
 
     with sr.Microphone() as source:
 
         print("Listening...")
 
-        recognizer.adjust_for_ambient_noise(source)
+        recognizer.adjust_for_ambient_noise(source, duration=0.5)
 
-        audio = recognizer.listen(source)
+        try:
+            audio = recognizer.listen(source, timeout=timeout, phrase_time_limit=5)
+        except sr.WaitTimeoutError:
+            return ""
 
     try:
 

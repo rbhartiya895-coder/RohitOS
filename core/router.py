@@ -6,10 +6,10 @@ from commands import search_commands
 from core import memory
 from core import ai_engine
 
-from core.state_manager import (
+from core.runtime_states import (
     set_state,
     SLEEPING,
-    SHUTDOWN
+    STOPPED
 )
 
 
@@ -480,7 +480,7 @@ def route_command(command_text):
 
         print("RohitOS shutting down...")
 
-        set_state(SHUTDOWN)
+        set_state(STOPPED)
 
         return "Shutting down RohitOS."
 
