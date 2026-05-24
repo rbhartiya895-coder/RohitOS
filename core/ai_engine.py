@@ -139,11 +139,11 @@ User: {prompt}
 
         if "429" in str(e):
 
-         return (
-        "My AI quota is exhausted right now. "
-        "Please try again later."
-    )
+            return (
+                "My AI quota is exhausted right now. "
+                "Please try again later."
+            )
 
-    return (
-    "AI system encountered an error."
-)
+        return (
+            "AI system encountered an error."
+        )
