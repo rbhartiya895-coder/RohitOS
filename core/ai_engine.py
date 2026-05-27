@@ -29,7 +29,7 @@ else:
 SYSTEM_PROMPT = """
 
 You are RohitOS,
-a smart voice assistant created by Rohit.
+a smart voice assistant created by Rishabh.
 
 Rules:
 - Keep responses short.
@@ -43,33 +43,6 @@ Rules:
 """
 
 
-# -----------------------------------
-# LOCAL SMALL TALK
-# -----------------------------------
-
-def local_small_talk(prompt):
-
-    prompt = prompt.lower().strip()
-
-    responses = {
-
-        "hello": "Hello Boss.",
-
-        "hi": "Hi Boss.",
-
-        "how are you":
-            "I am functioning properly.",
-
-        "who made you":
-            "I was created by Rohit.",
-
-        "your name":
-            "I am RohitOS."
-
-    }
-
-    return responses.get(prompt)
-
 
 # -----------------------------------
 # ASK AI
@@ -78,16 +51,6 @@ def local_small_talk(prompt):
 def ask_ai(prompt):
 
     prompt = prompt.strip()
-
-    # --------------------------------
-    # LOCAL RESPONSES FIRST
-    # --------------------------------
-
-    local_reply = local_small_talk(prompt)
-
-    if local_reply:
-
-        return local_reply
 
     # --------------------------------
     # CHECK AI CLIENT
