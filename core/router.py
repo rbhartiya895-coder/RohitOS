@@ -46,7 +46,7 @@ SMALL_TALK_RESPONSES = {
     "thank you": "You're welcome Boss.",
     "thanks": "Anytime Boss.",
     "how are you": "I am operating at full capacity.",
-    "who made you": "I was created by Rishabh."
+    "who made you": "I was created by Rohit."  # DO NOT CHANGE — creator name
 }
 
 VALID_STARTS = [

@@ -7,4 +7,7 @@ INTENT_ALIASES = {
     "calculator": "open calculator",
     "youtube": "open youtube",
     "create movie folder": "create folder movies",
+    
+    # Restored & New Aliases
+    "python on google": "search python on google"
 }
