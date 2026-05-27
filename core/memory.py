@@ -137,6 +137,26 @@ def show_memory():
 
 
 # -----------------------------------
+# FORGET DATA
+# -----------------------------------
+
+def forget(key):
+
+    memory = _load_memory()
+
+    key = key.lower().strip()
+
+    if key in memory:
+
+        del memory[key]
+        _save_memory(memory)
+
+        return f"I have forgotten your {key}."
+
+    return f"I don't have anything saved for {key}."
+
+
+# -----------------------------------
 # CLEAR MEMORY
 # -----------------------------------
 

@@ -110,6 +110,13 @@ def detect_command(command_text):
 
     if command_text == "show memory":
         return "memory_show"
+        
+    if command_text.startswith("forget "):
+        return "memory_forget"
+
+    if command_text.startswith("change my ") or command_text.startswith("update my "):
+        return "memory_change"
+        
     # --------------------------------
     # SEARCH COMMANDS
     # --------------------------------
@@ -390,6 +397,36 @@ def route_command(command_text):
     elif command_type == "memory_show":
 
        return str(memory.show_memory()) 
+       
+    # --------------------------------
+    # MEMORY FORGET
+    # --------------------------------
+
+    elif command_type == "memory_forget":
+
+        key = command_text.replace("forget my ", "").replace("forget ", "").strip()
+        key = clean_memory_key(key)
+        
+        return memory.forget(key)
+
+    # --------------------------------
+    # MEMORY CHANGE / UPDATE
+    # --------------------------------
+
+    elif command_type == "memory_change":
+
+        prefix = "change my " if command_text.startswith("change my ") else "update my "
+
+        if " to " in command_text:
+            parts = command_text.replace(prefix, "").split(" to ", 1)
+            
+            if len(parts) == 2:
+                key, value = parts
+                key = clean_memory_key(key)
+                return memory.remember(key.strip(), value.strip())
+                
+        return f"Please say it like: {prefix}branch to AI"
+
     # --------------------------------
     # CREATE FOLDER
     # --------------------------------
