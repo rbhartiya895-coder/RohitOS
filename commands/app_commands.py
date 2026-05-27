@@ -48,14 +48,20 @@ def open_app(app_name):
     # 1. Try shutil.which
     executable = shutil.which(app_name)
     if executable:
-        subprocess.Popen(executable)
-        return f"Opening {app_name}"
+        try:
+            subprocess.Popen(executable)
+            return f"Opening {app_name}"
+        except FileNotFoundError:
+            pass # Fall through to other methods
         
     # 2. Try common aliases
     if "vscode" in app_name or "code" in app_name:
         if shutil.which("code"):
-            subprocess.Popen("code")
-            return "Opening VS Code"
+            try:
+                subprocess.Popen("code")
+                return "Opening VS Code"
+            except FileNotFoundError:
+                return "VS Code is not available in PATH."
             
     # 3. Try start menu shortcuts
     shortcut = _find_start_menu_shortcut(app_name)
