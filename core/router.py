@@ -5,6 +5,7 @@ from commands import web_commands
 from commands import search_commands
 from core import memory
 from core import ai_engine
+from core.intent_parser import normalize_intent
 
 from core.runtime_states import (
     set_state,
@@ -35,6 +36,18 @@ IDENTITY_PHRASES = [
     "who are you",
     "what are you"
 ]
+
+SMALL_TALK_RESPONSES = {
+    "hello": "Hello Boss.",
+    "hi": "Hi Boss.",
+    "good morning": "Good morning Boss.",
+    "good afternoon": "Good afternoon Boss.",
+    "good evening": "Good evening Boss.",
+    "thank you": "You're welcome Boss.",
+    "thanks": "Anytime Boss.",
+    "how are you": "I am operating at full capacity.",
+    "who made you": "I was created by Rishabh."
+}
 
 VALID_STARTS = [
     "what", "how", "why", "who", "when", "where",
@@ -175,6 +188,13 @@ def detect_command(command_text):
         return "identity_command"
 
     # --------------------------------
+    # SMALL TALK COMMANDS
+    # --------------------------------
+
+    if command_text in SMALL_TALK_RESPONSES:
+        return "small_talk_command"
+
+    # --------------------------------
     # AI FALLBACK
     # --------------------------------
 
@@ -228,6 +248,7 @@ def strip_fillers(name):
 def route_command(command_text):
 
     command_text = command_text.lower().strip()
+    command_text = normalize_intent(command_text)
 
     command_type = detect_command(command_text)
 
@@ -500,6 +521,14 @@ def route_command(command_text):
     elif command_type == "identity_command":
 
         return "I am RohitOS, your personal AI assistant."
+
+    # --------------------------------
+    # SMALL TALK COMMANDS
+    # --------------------------------
+
+    elif command_type == "small_talk_command":
+
+        return SMALL_TALK_RESPONSES.get(command_text, "Yes Boss.")
 
     # --------------------------------
     # AI FALLBACK
