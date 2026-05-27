@@ -11,6 +11,129 @@ import stat
 
 WORKSPACE_PATH = "rohitos_workspace"
 
+# -----------------------------------
+# FILE EXTENSIONS
+# -----------------------------------
+FILE_EXTENSIONS = {
+    "pdf": ".pdf",
+    "presentation": ".pptx",
+    "powerpoint": ".pptx",
+    "ppt": ".pptx",
+    "doc": ".docx",
+    "word": ".docx",
+    "excel": ".xlsx",
+    "text": ".txt",
+    "notes": ".txt",
+    "image": [".jpg", ".png", ".jpeg"],
+    "picture": [".jpg", ".png", ".jpeg"]
+}
+
+# -----------------------------------
+# GET APPROVED FOLDERS
+# -----------------------------------
+def _get_approved_folders():
+    user_profile = os.environ.get("USERPROFILE", "")
+    return [
+        os.path.join(user_profile, "Documents"),
+        os.path.join(user_profile, "Downloads"),
+        os.path.join(user_profile, "Desktop"),
+        WORKSPACE_PATH
+    ]
+
+# -----------------------------------
+# SYSTEM FOLDER CONTROL
+# -----------------------------------
+def open_system_folder(folder_name):
+    user_profile = os.environ.get("USERPROFILE", "")
+    folder_map = {
+        "downloads": os.path.join(user_profile, "Downloads"),
+        "documents": os.path.join(user_profile, "Documents"),
+        "desktop": os.path.join(user_profile, "Desktop"),
+        "pictures": os.path.join(user_profile, "Pictures")
+    }
+    
+    path = folder_map.get(folder_name)
+    if path and os.path.exists(path):
+        os.startfile(path)
+        return f"Opening {folder_name} folder."
+        
+    return f"Could not find {folder_name} folder."
+
+# -----------------------------------
+# OPEN SPECIFIC FILE
+# -----------------------------------
+def open_specific_file(command_text):
+    
+    target_ext = None
+    target_keyword = command_text
+    
+    for key, ext in FILE_EXTENSIONS.items():
+        if key in command_text:
+            target_ext = ext
+            target_keyword = command_text.replace(key, "").strip()
+            break
+            
+    if not target_keyword:
+        return "Please specify a file name."
+        
+    # Search approved folders
+    matches = []
+    for folder in _get_approved_folders():
+        if not os.path.exists(folder):
+            continue
+        for root, dirs, files in os.walk(folder):
+            depth = root.replace(folder, "").count(os.sep)
+            if depth > 2:
+                dirs.clear()  # stop descending
+                continue
+            for file in files:
+                if target_keyword in file.lower():
+                    if target_ext is None or file.lower().endswith(target_ext):
+                        matches.append(os.path.join(root, file))
+                        
+    if matches:
+        # Open most recently modified match
+        matches.sort(key=lambda x: os.path.getmtime(x), reverse=True)
+        os.startfile(matches[0])
+        return f"Opening {os.path.basename(matches[0])}."
+        
+    return f"Could not find a file matching '{target_keyword}'."
+
+# -----------------------------------
+# OPEN LATEST FILE
+# -----------------------------------
+def open_latest_file(file_type):
+    
+    target_ext = FILE_EXTENSIONS.get(file_type)
+    if not target_ext:
+        # Fallback to literal extension
+        target_ext = "." + file_type
+        
+    matches = []
+    for folder in _get_approved_folders():
+        if not os.path.exists(folder):
+            continue
+        for root, dirs, files in os.walk(folder):
+            depth = root.replace(folder, "").count(os.sep)
+            if depth > 2:
+                dirs.clear()  # stop descending
+                continue
+            for file in files:
+                ext = os.path.splitext(file)[1].lower()
+                if isinstance(target_ext, list):
+                    if ext in target_ext:
+                        matches.append(os.path.join(root, file))
+                else:
+                    if ext == target_ext:
+                        matches.append(os.path.join(root, file))
+                        
+    if matches:
+        matches.sort(key=lambda x: os.path.getmtime(x), reverse=True)
+        os.startfile(matches[0])
+        return f"Opening latest {file_type}."
+        
+    return f"No recent {file_type} files found."
+
 
 # CREATE WORKSPACE IF NOT EXISTS
 if not os.path.exists(WORKSPACE_PATH):

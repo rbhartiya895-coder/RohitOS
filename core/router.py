@@ -57,6 +57,10 @@ VALID_STARTS = [
     "hello", "hi", "hey", "please"
 ]
 
+KNOWN_FOLDERS = ["downloads", "documents", "desktop", "pictures"]
+
+FILE_KEYWORDS = ["pdf", "doc", "presentation", "powerpoint", "ppt", "excel", "txt", "notes"]
+
 
 # -----------------------------------
 # DETECT COMMAND TYPE
@@ -173,12 +177,26 @@ def detect_command(command_text):
     # --------------------------------
     # APP COMMANDS
     # --------------------------------
-
-    if command_text.startswith("open "):
-        return "open_app"
-
+    
     if command_text.startswith("close "):
         return "close_app"
+
+    # --------------------------------
+    # FILE / FOLDER OPENING
+    # --------------------------------
+
+    if command_text.startswith("open latest "):
+        return "open_latest_file"
+        
+    for folder in KNOWN_FOLDERS:
+        if command_text == f"open {folder}":
+            return "open_system_folder"
+            
+    if command_text.startswith("open ") and any(keyword in command_text for keyword in FILE_KEYWORDS):
+        return "open_specific_file"
+        
+    if command_text.startswith("open "):
+        return "open_app"
 
     # --------------------------------
     # SIMPLE INFO COMMANDS
@@ -300,6 +318,29 @@ def route_command(command_text):
         ).strip()
 
         return app_commands.close_app(app_name)
+        
+    # --------------------------------
+    # SYSTEM FOLDERS
+    # --------------------------------
+
+    elif command_type == "open_system_folder":
+        folder_name = command_text.replace("open ", "").strip()
+        return file_commands.open_system_folder(folder_name)
+        
+    # --------------------------------
+    # LATEST FILE
+    # --------------------------------
+
+    elif command_type == "open_latest_file":
+        file_type = command_text.replace("open latest ", "").strip()
+        return file_commands.open_latest_file(file_type)
+
+    # --------------------------------
+    # SPECIFIC FILE
+    # --------------------------------
+
+    elif command_type == "open_specific_file":
+        return file_commands.open_specific_file(command_text.replace("open ", "").strip())
     # --------------------------------
     # GOOGLE SEARCH
     # --------------------------------
