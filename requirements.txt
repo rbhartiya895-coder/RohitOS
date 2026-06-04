@@ -1,1 +1,5 @@
+google-generativeai
+SpeechRecognition
+pyttsx3
+python-dotenv
 PyPDF2
