@@ -23,10 +23,18 @@ def _extract_text(filepath):
                     if page_text:
                         text += page_text + "\n"
                         
-            if not text.strip():
-                return None, "This PDF appears to be scanned or contains no extractable text."
+            # Clean text to measure actual characters
+            cleaned_text = text.strip()
+            
+            # Terminal logging
+            print(f"Pages Scanned: {limit}/{num_pages}")
+            print(f"Characters Extracted: {len(cleaned_text)}")
+            
+            if len(cleaned_text) < 50:
+                print("AI Invocation: SKIPPED (Not enough text)")
+                return None, "I could not extract readable text from this PDF. This appears to be a scanned or image-based PDF. OCR support is not yet available."
                 
-            return text, None
+            return cleaned_text, None
         except Exception as e:
             return None, f"Error reading PDF: {e}"
             
@@ -45,6 +53,7 @@ def summarize_file():
     if error:
         return error
         
+    print("AI Invocation: YES")
     print("Generating summary...")
     text = text[:3000]  # Cap input tokens for safe API usage
     prompt = f"Summarize the following document and provide key takeaways in bullet points:\n\n{text}"
@@ -61,6 +70,7 @@ def create_revision_notes():
     if error:
         return error
         
+    print("AI Invocation: YES")
     print("Generating revision notes...")
     text = text[:3000]  # Cap input tokens for safe API usage
     prompt = f"Create concise revision notes, important concepts, and study points from this text:\n\n{text}"
