@@ -5,7 +5,7 @@ from commands import web_commands
 from commands import search_commands
 from core import memory
 from core import ai_engine
-from core.intent_parser import normalize_intent
+from core.intent_understanding import normalize_intent
 
 from core.runtime_states import (
     set_state,
