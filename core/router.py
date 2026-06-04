@@ -3,6 +3,7 @@ from commands import app_commands
 from commands import file_commands
 from commands import web_commands
 from commands import search_commands
+from commands import study_commands
 from core import memory
 from core import ai_engine
 from core.intent_understanding import normalize_intent
@@ -199,6 +200,18 @@ def detect_command(command_text):
         return "open_app"
 
     # --------------------------------
+    # STUDY COMMANDS
+    # --------------------------------
+    if command_text == "summarize file":
+        return "summarize_file"
+    
+    if command_text == "create revision notes":
+        return "create_revision_notes"
+        
+    if command_text == "start study mode":
+        return "start_study_mode"
+
+    # --------------------------------
     # SIMPLE INFO COMMANDS
     # --------------------------------
 
@@ -341,6 +354,19 @@ def route_command(command_text):
 
     elif command_type == "open_specific_file":
         return file_commands.open_specific_file(command_text.replace("open ", "").strip())
+        
+    # --------------------------------
+    # STUDY COMMANDS
+    # --------------------------------
+
+    elif command_type == "summarize_file":
+        return study_commands.summarize_file()
+        
+    elif command_type == "create_revision_notes":
+        return study_commands.create_revision_notes()
+        
+    elif command_type == "start_study_mode":
+        return study_commands.start_study_mode()
     # --------------------------------
     # GOOGLE SEARCH
     # --------------------------------

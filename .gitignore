@@ -4,4 +4,5 @@ __pycache__/
 venv/
 rohitos_workspace/
 data/memory.json
+data/session.json
 diff_review.txt

@@ -23,7 +23,12 @@ MAPPINGS = {
     "pictures": "open pictures",
     "memory": "show memory",
     "what do you remember about me": "show memory",
-    "what do you know about me": "show memory"
+    "what do you know about me": "show memory",
+    "summarize this pdf": "summarize file",
+    "what is this pdf about": "summarize file",
+    "give me key points": "summarize file",
+    "create revision notes": "create revision notes",
+    "make study notes from this pdf": "create revision notes"
 }
 
 def normalize_intent(command_text):
