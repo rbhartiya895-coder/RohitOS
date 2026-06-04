@@ -3,6 +3,7 @@
 import os
 import shutil
 import stat
+from core import session
 
 
 # -----------------------------------
@@ -95,6 +96,7 @@ def open_specific_file(command_text):
         # Open most recently modified match
         matches.sort(key=lambda x: os.path.getmtime(x), reverse=True)
         os.startfile(matches[0])
+        session.update_last_file(matches[0])
         return f"Opening {os.path.basename(matches[0])}."
         
     return f"Could not find a file matching '{target_keyword}'."
@@ -130,6 +132,7 @@ def open_latest_file(file_type):
     if matches:
         matches.sort(key=lambda x: os.path.getmtime(x), reverse=True)
         os.startfile(matches[0])
+        session.update_last_file(matches[0])
         return f"Opening latest {file_type}."
         
     return f"No recent {file_type} files found."
