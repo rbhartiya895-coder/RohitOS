@@ -77,7 +77,15 @@ def open_specific_file(command_text):
     if not target_keyword:
         return "Please specify a file name."
         
-    # Search approved folders
+    # 1. Check Session Aliases First
+    alias_path, matched_alias = session.get_document_alias(target_keyword)
+    if alias_path and os.path.exists(alias_path):
+        os.startfile(alias_path)
+        session.update_last_file(alias_path)
+        print(f"Alias Used: {matched_alias}")
+        return f"Opening {os.path.basename(alias_path)}."
+
+    # 2. Search approved folders
     matches = []
     for folder in _get_approved_folders():
         if not os.path.exists(folder):
@@ -88,16 +96,24 @@ def open_specific_file(command_text):
                 dirs.clear()  # stop descending
                 continue
             for file in files:
-                if target_keyword in file.lower():
-                    if target_ext is None or file.lower().endswith(target_ext):
+                # Better partial matching
+                file_lower = file.lower()
+                if target_keyword in file_lower or target_keyword.replace(" ", "_") in file_lower:
+                    if target_ext is None or file_lower.endswith(target_ext):
                         matches.append(os.path.join(root, file))
                         
     if matches:
         # Open most recently modified match
         matches.sort(key=lambda x: os.path.getmtime(x), reverse=True)
-        os.startfile(matches[0])
-        session.update_last_file(matches[0])
-        return f"Opening {os.path.basename(matches[0])}."
+        best_match = matches[0]
+        
+        # Calculate a simple match ratio for debugging (percentage of match)
+        score = int((len(target_keyword) / len(os.path.basename(best_match))) * 100)
+        
+        os.startfile(best_match)
+        session.update_last_file(best_match)
+        print(f"Match Ratio: {score}%")
+        return f"Opening {os.path.basename(best_match)}."
         
     return f"Could not find a file matching '{target_keyword}'."
 

@@ -87,16 +87,21 @@ def _save_memory(memory):
 # -----------------------------------
 
 def remember(key, value):
-
     memory = _load_memory()
-
     key = key.lower().strip()
-
     memory[key] = value
-
     _save_memory(memory)
-
     return f"I will remember that your {key} is {value}"
+
+def remember_fact(fact):
+    memory = _load_memory()
+    if "facts" not in memory:
+        memory["facts"] = []
+    
+    # Store the fact
+    memory["facts"].append(fact.strip())
+    _save_memory(memory)
+    return "I will remember that."
 
 
 # -----------------------------------
@@ -104,15 +109,10 @@ def remember(key, value):
 # -----------------------------------
 
 def recall(key):
-
     memory = _load_memory()
-
     key = key.lower().strip()
-
     if key in memory:
-
         return f"Your {key} is {memory[key]}"
-
     return "I don't remember that yet."
 
 
@@ -121,19 +121,30 @@ def recall(key):
 # -----------------------------------
 
 def show_memory():
-
     memory = _load_memory()
-
     if not memory:
-
         return "Memory is empty."
 
     print("\n--- SAVED MEMORY ---")
+    
+    # Display Key-Value pairs
     for key, value in memory.items():
-        print(f"{key}: {value}")
+        if key != "facts":
+            print(f"{key.title()}: {value}")
+            
+    # Display Facts
+    if "facts" in memory and memory["facts"]:
+        print("\nFacts:")
+        for fact in memory["facts"]:
+            print(f"* {fact}")
+            
     print("--------------------\n")
-
-    return f"You have {len(memory)} saved items in memory."
+    # Calculate accurate item count
+    total_items = len([k for k in memory.keys() if k != "facts"])
+    if "facts" in memory:
+        total_items += len(memory["facts"])
+        
+    return f"You have {total_items} saved items in memory."
 
 
 # -----------------------------------

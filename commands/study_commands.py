@@ -47,7 +47,7 @@ def summarize_file():
     if not filepath or not os.path.exists(filepath):
         return "No file is currently active. Please open a PDF first."
         
-    print(f"Reading file: {filepath}")
+    print(f"Current Document: {filepath}")
     text, error = _extract_text(filepath)
     
     if error:
@@ -55,16 +55,55 @@ def summarize_file():
         
     print("AI Invocation: YES")
     print("Generating summary...")
-    text = text[:3000]  # Cap input tokens for safe API usage
-    prompt = f"Summarize the following document and provide key takeaways in bullet points:\n\n{text}"
-    return ai_engine.ask_ai(prompt)
+    text_capped = text[:3000]  # Cap input tokens for safe API usage
+    prompt = f"Summarize the following document and provide key takeaways in bullet points:\n\n{text_capped}"
+    
+    try:
+        response = ai_engine.ask_ai(prompt)
+        if "quota" in response.lower() or "error" in response.lower():
+            raise Exception("AI Error")
+        return response
+    except Exception:
+        # Local fallback algorithm
+        lines = [line.strip() for line in text.split("\n") if line.strip()]
+        
+        # 1. Detect document type
+        text_lower = text[:1000].lower()
+        doc_type = "Scanned Document/PDF"
+        if "assignment" in text_lower:
+            doc_type = "Assignment"
+        elif "resume" in text_lower or "curriculum vitae" in text_lower:
+            doc_type = "Resume"
+        elif "notes" in text_lower:
+            doc_type = "Notes"
+            
+        # 2. Extract meaningful headings (short lines)
+        headings = [line for line in lines if len(line) < 40 and not line.isnumeric()][:3]
+        
+        # 3. Extract key lines (longer descriptive lines)
+        key_lines = [line for line in lines if len(line) > 50][:4]
+        
+        # 4. Present concise bullet points
+        fallback = "Cloud AI unavailable.\nUsing local summary mode.\n\n"
+        fallback += f"Document Type: {doc_type}\n\n"
+        fallback += "Key Information:\n\n"
+        
+        for h in headings:
+            fallback += f"* {h}\n"
+            
+        for k in key_lines:
+            # Just take the first few words of key lines to keep it concise
+            words = k.split()[:7]
+            fallback += f"* {' '.join(words)}...\n"
+            
+        return fallback.strip()
 
-def create_revision_notes():
+def create_revision_notes(custom_name=None):
     filepath = session.get_last_file()
     if not filepath or not os.path.exists(filepath):
         return "No file is currently active. Please open a PDF first."
         
-    print(f"Reading file: {filepath}")
+    print(f"Current Document: {filepath}")
     text, error = _extract_text(filepath)
     
     if error:
@@ -76,8 +115,12 @@ def create_revision_notes():
     prompt = f"Create concise revision notes, important concepts, and study points from this text:\n\n{text}"
     notes = ai_engine.ask_ai(prompt)
     
-    base_name = os.path.splitext(os.path.basename(filepath))[0]
-    notes_name = f"{base_name}_revision.txt"
+    if custom_name:
+        notes_name = f"{custom_name.replace(' ', '_')}.txt"
+    else:
+        base_name = os.path.splitext(os.path.basename(filepath))[0]
+        notes_name = f"{base_name}_revision.txt"
+        
     notes_path = os.path.join(file_commands.WORKSPACE_PATH, notes_name)
     
     try:

@@ -55,13 +55,42 @@ def open_app(app_name):
             pass # Fall through to other methods
         
     # 2. Try common aliases
-    if "vscode" in app_name or "code" in app_name:
+    # 'bs code' is a common voice recognition artifact for 'vs code'
+    vs_aliases = ["vs code", "v s code", "bs code", "visual studio code", "code"]
+    if app_name in vs_aliases or "vscode" in app_name:
+        # 1. Try PATH
         if shutil.which("code"):
             try:
                 subprocess.Popen("code")
                 return "Opening VS Code"
-            except FileNotFoundError:
-                return "VS Code is not available in PATH."
+            except Exception:
+                pass
+                
+        # 2. Try AppData
+        appdata_path = os.path.join(os.environ.get("USERPROFILE", ""), "AppData", "Local", "Programs", "Microsoft VS Code", "Code.exe")
+        if os.path.exists(appdata_path):
+            try:
+                subprocess.Popen(appdata_path)
+                return "Opening VS Code"
+            except Exception:
+                pass
+            
+        # 3. Try Program Files
+        prog_files_path = os.path.join(os.environ.get("ProgramFiles", "C:\\Program Files"), "Microsoft VS Code", "Code.exe")
+        if os.path.exists(prog_files_path):
+            try:
+                subprocess.Popen(prog_files_path)
+                return "Opening VS Code"
+            except Exception:
+                pass
+            
+        prog_files_x86_path = os.path.join(os.environ.get("ProgramFiles(x86)", "C:\\Program Files (x86)"), "Microsoft VS Code", "Code.exe")
+        if os.path.exists(prog_files_x86_path):
+            try:
+                subprocess.Popen(prog_files_x86_path)
+                return "Opening VS Code"
+            except Exception:
+                pass
             
     # 3. Try start menu shortcuts
     shortcut = _find_start_menu_shortcut(app_name)
