@@ -27,7 +27,8 @@ WEBSITES = [
     "chat gpt",
     "instagram",
     "facebook",
-    "gmail"
+    "gmail",
+    "linkedin"
 ]
 
 # -----------------------------------
@@ -206,7 +207,7 @@ def detect_command(command_text):
     if command_text == "summarize file":
         return "summarize_file"
     
-    if command_text == "create revision notes":
+    if command_text.startswith("create revision notes"):
         return "create_revision_notes"
         
     if command_text == "start study mode":
@@ -364,7 +365,10 @@ def route_command(command_text):
         return study_commands.summarize_file()
         
     elif command_type == "create_revision_notes":
-        return study_commands.create_revision_notes()
+        custom_name = None
+        if " called " in command_text:
+            custom_name = command_text.split(" called ", 1)[1].strip()
+        return study_commands.create_revision_notes(custom_name)
         
     elif command_type == "start_study_mode":
         return study_commands.start_study_mode()
@@ -419,11 +423,7 @@ def route_command(command_text):
             )[1]
 
             if " is " not in parts:
-
-                return (
-                    "Please say memory like: "
-                    "remember name is Rohit"
-                )
+                return memory.remember_fact(parts.strip())
 
             key, value = parts.split(
                 " is ",
