@@ -26,7 +26,8 @@ WEBSITES = [
     "chatgpt",
     "chat gpt",
     "instagram",
-    "facebook"
+    "facebook",
+    "gmail"
 ]
 
 # -----------------------------------
