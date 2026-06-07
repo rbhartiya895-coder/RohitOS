@@ -65,6 +65,14 @@ def open_system_folder(folder_name):
 # -----------------------------------
 def open_specific_file(command_text):
     
+    # 0. Check Revision Notes Override First
+    if command_text in ["revision notes", "revision note"]:
+        last_note = session.get_last_revision_note()
+        if last_note and os.path.exists(last_note):
+            os.startfile(last_note)
+            session.update_last_file(last_note)
+            return f"Opening {os.path.basename(last_note)}."
+
     target_ext = None
     target_keyword = command_text
     
@@ -85,7 +93,7 @@ def open_specific_file(command_text):
         print(f"Alias Used: {matched_alias}")
         return f"Opening {os.path.basename(alias_path)}."
 
-    # 2. Search approved folders
+    # 3. Search approved folders
     matches = []
     for folder in _get_approved_folders():
         if not os.path.exists(folder):

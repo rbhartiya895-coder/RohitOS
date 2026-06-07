@@ -18,7 +18,7 @@ def generate_alias(filename):
     name = re.sub(r'\s+', ' ', name).strip()
     return name
 
-def update_last_file(filepath):
+def _update_session_key(key, value):
     _ensure_data_dir()
     data = {"aliases": {}}
     if os.path.exists(SESSION_FILE):
@@ -30,25 +30,24 @@ def update_last_file(filepath):
         except Exception:
             pass
             
-    # Track context
-    data["last_opened_file"] = filepath
+    data[key] = value
     
-    # Store friendly alias mapping
-    filename = os.path.basename(filepath)
-    alias = generate_alias(filename)
-    
-    # Cap alias dict size at 50 to prevent unbounded growth
-    if alias not in data["aliases"] and len(data["aliases"]) >= 50:
-        first_key = next(iter(data["aliases"]))
-        del data["aliases"][first_key]
+    if key == "last_opened_file":
+        filename = os.path.basename(value)
+        alias = generate_alias(filename)
+        if alias not in data["aliases"] and len(data["aliases"]) >= 50:
+            first_key = next(iter(data["aliases"]))
+            del data["aliases"][first_key]
+        data["aliases"][alias] = value
         
-    data["aliases"][alias] = filepath
-    
     try:
         with open(SESSION_FILE, "w") as f:
             json.dump(data, f, indent=4)
     except Exception as e:
         print(f"Error saving session: {e}")
+
+def update_last_file(filepath):
+    _update_session_key("last_opened_file", filepath)
 
 def get_last_file():
     if not os.path.exists(SESSION_FILE):
@@ -58,6 +57,20 @@ def get_last_file():
         with open(SESSION_FILE, "r") as f:
             data = json.load(f)
             return data.get("last_opened_file")
+    except Exception:
+        return None
+
+def update_last_revision_note(filepath):
+    _update_session_key("last_revision_note", filepath)
+
+def get_last_revision_note():
+    if not os.path.exists(SESSION_FILE):
+        return None
+        
+    try:
+        with open(SESSION_FILE, "r") as f:
+            data = json.load(f)
+            return data.get("last_revision_note")
     except Exception:
         return None
 

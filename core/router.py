@@ -43,6 +43,12 @@ IDENTITY_PHRASES = [
 SMALL_TALK_RESPONSES = {
     "hello": "Hello Boss.",
     "hi": "Hi Boss.",
+    "hello rohit os": "Hello Boss.",
+    "hi rohit os": "Hi Boss.",
+    "hello rohitos": "Hello Boss.",
+    "hi rohitos": "Hi Boss.",
+    "hello rohit": "Hello Boss.",
+    "hi rohit": "Hi Boss.",
     "good morning": "Good morning Boss.",
     "good afternoon": "Good afternoon Boss.",
     "good evening": "Good evening Boss.",
@@ -368,6 +374,8 @@ def route_command(command_text):
         custom_name = None
         if " called " in command_text:
             custom_name = command_text.split(" called ", 1)[1].strip()
+        elif " named " in command_text:
+            custom_name = command_text.split(" named ", 1)[1].strip()
         return study_commands.create_revision_notes(custom_name)
         
     elif command_type == "start_study_mode":

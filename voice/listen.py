@@ -19,10 +19,14 @@ def listen(timeout=5):
             status = "Degraded" if is_degraded else "Active"
             print(f"Listening Status: {status}")
             
+            # Calibration and threshold adjustments for better capture
             recognizer.adjust_for_ambient_noise(source, duration=0.5)
+            recognizer.pause_threshold = 1.5
+            recognizer.non_speaking_duration = 0.5
             
             try:
-                audio = recognizer.listen(source, timeout=timeout, phrase_time_limit=5)
+                # Increased phrase_time_limit so sentences aren't cut off midway
+                audio = recognizer.listen(source, timeout=timeout, phrase_time_limit=10)
             except sr.WaitTimeoutError:
                 return ""
                 
@@ -44,7 +48,11 @@ def listen(timeout=5):
             is_degraded = False
             print("[Voice Service Restored]")
             
+        audio_duration = len(audio.frame_data) / (audio.sample_rate * audio.sample_width)
         print("You said:", text)
+        print(f"Words Captured: {len(text.split())}")
+        print(f"Recognition Length: {len(text)} chars")
+        print(f"Audio Duration: {audio_duration:.2f}s")
         return text.lower()
 
     except sr.UnknownValueError:
