@@ -94,12 +94,21 @@ def remember(key, value):
     return f"I will remember that your {key} is {value}"
 
 def remember_fact(fact):
+    fact = fact.strip()
+    words = fact.split()
+    
+    if len(fact) < 10 or len(words) < 3:
+        return "That fact is too short to save."
+        
     memory = _load_memory()
     if "facts" not in memory:
         memory["facts"] = []
     
+    if fact in memory["facts"]:
+        return "I already remember that."
+        
     # Store the fact
-    memory["facts"].append(fact.strip())
+    memory["facts"].append(fact)
     _save_memory(memory)
     return "I will remember that."
 
@@ -154,15 +163,24 @@ def show_memory():
 def forget(key):
 
     memory = _load_memory()
-
     key = key.lower().strip()
+    
+    deleted_something = False
 
     if key in memory:
-
         del memory[key]
-        _save_memory(memory)
+        deleted_something = True
+        
+    # Check facts for partial match
+    if "facts" in memory:
+        original_length = len(memory["facts"])
+        memory["facts"] = [f for f in memory["facts"] if key not in f.lower()]
+        if len(memory["facts"]) < original_length:
+            deleted_something = True
 
-        return f"I have forgotten your {key}."
+    if deleted_something:
+        _save_memory(memory)
+        return f"I have forgotten {key}."
 
     return f"I don't have anything saved for {key}."
 

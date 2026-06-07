@@ -16,7 +16,11 @@ WEBSITES = {
 
     "instagram": "https://www.instagram.com",
 
-    "facebook": "https://www.facebook.com"
+    "facebook": "https://www.facebook.com",
+
+    "gmail": "https://mail.google.com",
+
+    "linkedin": "https://www.linkedin.com"
 }
 
 

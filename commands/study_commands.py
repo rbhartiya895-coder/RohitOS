@@ -126,6 +126,7 @@ def create_revision_notes(custom_name=None):
     try:
         with open(notes_path, "w", encoding="utf-8") as f:
             f.write(notes)
+        session.update_last_revision_note(notes_path)
         return f"Revision notes generated and saved as {notes_name}."
     except Exception as e:
         return f"Error saving notes: {e}"
