@@ -32,5 +32,19 @@
             "film",
             "national"
         ]
+    },
+    {
+        "title": "Naruto - Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Naruto",
+        "domain": "en.wikipedia.org",
+        "timestamp": "2026-06-09 00:32:38",
+        "summary": "Title: Naruto - Wikipedia\nHeadings: Plot, Part I, Part II\nKeywords: naruto, sasuke, manga, ninja, konoha\nSummary: Naruto - Wikipedia Jump to content From Wikipedia, the free encyclopedia Japanese manga series by Masashi Kishimoto This article is about the manga series.  For the anime, see Naruto (TV series) .  For the title character , see Naruto Uzumaki.",
+        "keywords": [
+            "naruto",
+            "sasuke",
+            "manga",
+            "ninja",
+            "konoha"
+        ]
     }
 ]
