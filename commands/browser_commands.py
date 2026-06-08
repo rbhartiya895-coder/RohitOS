@@ -9,6 +9,12 @@ from core.session import get_browser_context, update_browser_context, update_bro
 from core.ai_engine import ask_ai
 from urllib.parse import urlparse
 
+def _is_ai_failure(text):
+    if not text or len(str(text)) < 10:
+        return True
+    lower_text = str(text).lower()
+    return any(word in lower_text for word in ["error", "quota", "unavailable", "failed", "exception"])
+
 def get_current_page():
     """
     Passively extracts the URL and title from the active Chrome/Edge window using UIAutomation.
@@ -121,8 +127,9 @@ def summarize_page():
     if not ctx:
         return "I cannot detect an active webpage to summarize."
         
-    if ctx.get("summary"):
-        print("[Browser AI Cache HIT]\nUsing cached browser context.")
+    if ctx.get("summary") and not _is_ai_failure(ctx.get("summary")):
+        source = "Local Fallback Summary" if ctx.get("is_fallback") else "AI Summary"
+        print(f"[Browser AI Cache HIT]\nCache Source:\n{source}")
         return ctx["summary"]
         
     print("[Browser AI Cache MISS]\nCalling Gemini...")
@@ -131,14 +138,14 @@ def summarize_page():
     
     keywords = _extract_local_keywords(ctx['text'])
     
-    if not summary or "Error" in summary:
+    if _is_ai_failure(summary):
         print("Cloud AI unavailable.\nUsing local summary mode.")
         ctx['keywords'] = keywords
         local_summary = _get_local_summary(ctx)
-        update_browser_cache_keys({"keywords": keywords, "summary": local_summary})
+        update_browser_cache_keys({"keywords": keywords, "summary": local_summary, "is_fallback": True})
         return local_summary
         
-    update_browser_cache_keys({"keywords": keywords, "summary": summary})
+    update_browser_cache_keys({"keywords": keywords, "summary": summary, "is_fallback": False})
     return summary
 
 def get_key_points():
@@ -146,12 +153,14 @@ def get_key_points():
     if not ctx:
         return "I cannot detect an active webpage."
         
-    if ctx.get("key_points"):
-        print("[Browser AI Cache HIT]\nUsing cached browser context.")
+    if ctx.get("key_points") and not _is_ai_failure(ctx.get("key_points")):
+        source = "Local Fallback Summary" if ctx.get("is_fallback") else "AI Summary"
+        print(f"[Browser AI Cache HIT]\nCache Source:\n{source}")
         return ctx["key_points"]
         
-    if ctx.get("summary"):
-        print("[Browser AI Cache HIT]\nUsing cached browser context.")
+    if ctx.get("summary") and not _is_ai_failure(ctx.get("summary")):
+        source = "Local Fallback Summary" if ctx.get("is_fallback") else "AI Summary"
+        print(f"[Browser AI Cache HIT]\nCache Source:\n{source}")
         key_points = _generate_local_key_points(ctx["summary"])
         update_browser_cache_keys({"key_points": key_points})
         return key_points
@@ -159,7 +168,7 @@ def get_key_points():
     print("[Browser AI Cache MISS]\nCalling Gemini...")
     prompt = f"Extract 3 to 5 key points from this webpage as a bulleted list:\n\nTitle: {ctx['title']}\n\nContent:\n{ctx['text']}"
     points = ask_ai(prompt)
-    if not points or "Error" in points:
+    if _is_ai_failure(points):
         return "Cloud AI unavailable. I cannot extract key points locally right now."
         
     update_browser_cache_keys({"key_points": points})
@@ -171,14 +180,15 @@ def make_notes():
         return "I cannot detect an active webpage."
         
     notes = ""
-    if ctx.get("summary") and ctx.get("key_points"):
-        print("[Browser AI Cache HIT]\nUsing cached browser context.")
+    if ctx.get("summary") and not _is_ai_failure(ctx.get("summary")) and ctx.get("key_points") and not _is_ai_failure(ctx.get("key_points")):
+        source = "Local Fallback Summary" if ctx.get("is_fallback") else "AI Summary"
+        print(f"[Browser AI Cache HIT]\nCache Source:\n{source}")
         notes = f"Title: {ctx['title']}\n\nSummary:\n{ctx['summary']}\n\nKey Points:\n{ctx['key_points']}"
     else:
         print("[Browser AI Cache MISS]\nCalling Gemini...")
         prompt = f"Create structured study notes from this webpage:\n\nTitle: {ctx['title']}\n\nContent:\n{ctx['text']}"
         notes = ask_ai(prompt)
-        if not notes or "Error" in notes:
+        if _is_ai_failure(notes):
             return "Cloud AI unavailable. I cannot generate notes right now."
         
     # Save notes
@@ -204,15 +214,16 @@ def create_ppt_points():
     if not ctx:
         return "I cannot detect an active webpage."
         
-    if ctx.get("summary") and ctx.get("key_points"):
-        print("[Browser AI Cache HIT]\nUsing cached browser context.")
+    if ctx.get("summary") and not _is_ai_failure(ctx.get("summary")) and ctx.get("key_points") and not _is_ai_failure(ctx.get("key_points")):
+        source = "Local Fallback Summary" if ctx.get("is_fallback") else "AI Summary"
+        print(f"[Browser AI Cache HIT]\nCache Source:\n{source}")
         ppt = f"Slide 1: {ctx['title']}\n- {ctx['summary']}\n\nSlide 2: Key Points\n{ctx['key_points']}"
         return ppt
         
     print("[Browser AI Cache MISS]\nCalling Gemini...")
     prompt = f"Create presentation slides from this webpage. Format exactly like 'Slide 1: [Title]\\n- Point 1\\n- Point 2'. Create 3 slides.\n\nContent:\n{ctx['text']}"
     ppt = ask_ai(prompt)
-    if not ppt or "Error" in ppt:
+    if _is_ai_failure(ppt):
         return "Cloud AI unavailable."
     return ppt
 
@@ -232,6 +243,11 @@ def save_article():
                 articles = json.load(f)
         except Exception:
             pass
+            
+    # Check for duplicates
+    for article in articles:
+        if article.get("url") == ctx.get("url", ""):
+            return f"You have already saved {ctx.get('title', 'this article')}."
             
     articles.append({
         "title": ctx.get("title", ""),
