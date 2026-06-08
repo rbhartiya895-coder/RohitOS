@@ -197,6 +197,9 @@ def detect_command(command_text):
     if command_text.startswith("open latest "):
         return "open_latest_file"
         
+    if command_text == "open previous document":
+        return "open_previous_document"
+        
     for folder in KNOWN_FOLDERS:
         if command_text == f"open {folder}":
             return "open_system_folder"
@@ -349,12 +352,15 @@ def route_command(command_text):
         return file_commands.open_system_folder(folder_name)
         
     # --------------------------------
-    # LATEST FILE
+    # LATEST/PREVIOUS FILE
     # --------------------------------
 
     elif command_type == "open_latest_file":
         file_type = command_text.replace("open latest ", "").strip()
         return file_commands.open_latest_file(file_type)
+
+    elif command_type == "open_previous_document":
+        return file_commands.open_previous_document()
 
     # --------------------------------
     # SPECIFIC FILE
