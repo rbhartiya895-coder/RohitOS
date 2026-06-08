@@ -48,6 +48,7 @@ def summarize_file():
         return "No file is currently active. Please open a PDF first."
         
     print(f"Current Document: {filepath}")
+    session.set_active_context_type("document")
     text, error = _extract_text(filepath)
     
     if error:
@@ -56,7 +57,7 @@ def summarize_file():
     print("AI Invocation: YES")
     print("Generating summary...")
     text_capped = text[:3000]  # Cap input tokens for safe API usage
-    prompt = f"Summarize the following document and provide key takeaways in bullet points:\n\n{text_capped}"
+    prompt = f"Summarize the following document and provide a short 2-3 sentence overview:\n\n{text_capped}"
     
     try:
         response = ai_engine.ask_ai(prompt)
@@ -98,12 +99,38 @@ def summarize_file():
             
         return fallback.strip()
 
+def get_key_points():
+    filepath = session.get_last_file()
+    if not filepath or not os.path.exists(filepath):
+        return "No file is currently active. Please open a PDF first."
+        
+    print(f"Current Document: {filepath}")
+    session.set_active_context_type("document")
+    text, error = _extract_text(filepath)
+    
+    if error:
+        return error
+        
+    print("AI Invocation: YES")
+    print("Extracting key points...")
+    text_capped = text[:3000]
+    prompt = f"Extract the top 5 key points from this document as a bulleted list:\n\n{text_capped}"
+    
+    try:
+        response = ai_engine.ask_ai(prompt)
+        if "quota" in response.lower() or "error" in response.lower():
+            raise Exception("AI Error")
+        return response
+    except Exception:
+        return "Cloud AI unavailable. Could not extract key points locally."
+
 def create_revision_notes(custom_name=None):
     filepath = session.get_last_file()
     if not filepath or not os.path.exists(filepath):
         return "No file is currently active. Please open a PDF first."
         
     print(f"Current Document: {filepath}")
+    session.set_active_context_type("document")
     text, error = _extract_text(filepath)
     
     if error:
