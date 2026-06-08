@@ -113,7 +113,7 @@ def get_last_revision_note():
 def get_document_alias(alias_query):
     """Lookup a filepath by an exact, fuzzy, or keyword match."""
     if not os.path.exists(SESSION_FILE):
-        return None, None
+        return None, None, None
         
     try:
         with open(SESSION_FILE, "r") as f:
@@ -125,20 +125,20 @@ def get_document_alias(alias_query):
             
             # Exact match
             if alias_query_lower in aliases:
-                return aliases[alias_query_lower], alias_query_lower
+                return aliases[alias_query_lower], alias_query_lower, "alias"
                 
             # Fuzzy match aliases
             matches = difflib.get_close_matches(alias_query_lower, aliases.keys(), n=1, cutoff=0.6)
             if matches:
-                return aliases[matches[0]], matches[0]
+                return aliases[matches[0]], matches[0], "alias"
                 
             # Keyword match
             if len(alias_query_lower) >= 3:
                 for filepath, keywords in document_keywords.items():
                     for kw in keywords:
                         if kw.lower() in alias_query_lower or alias_query_lower in kw.lower():
-                            return filepath, kw
+                            return filepath, kw, "keyword"
                         
-            return None, None
+            return None, None, None
     except Exception:
-        return None, None
+        return None, None, None

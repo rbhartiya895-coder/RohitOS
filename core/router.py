@@ -208,7 +208,7 @@ def detect_command(command_text):
         return "open_specific_file"
         
     if command_text.startswith("open "):
-        return "open_app"
+        return "open_document_or_app"
 
     # --------------------------------
     # STUDY COMMANDS
@@ -318,19 +318,6 @@ def route_command(command_text):
         return web_commands.open_website(site)
 
     # --------------------------------
-    # OPEN APP
-    # --------------------------------
-
-    elif command_type == "open_app":
-
-        app_name = command_text.replace(
-            "open ",
-            ""
-        ).strip()
-
-        return app_commands.open_app(app_name)
-
-    # --------------------------------
     # CLOSE APP
     # --------------------------------
 
@@ -368,6 +355,20 @@ def route_command(command_text):
 
     elif command_type == "open_specific_file":
         return file_commands.open_specific_file(command_text.replace("open ", "").strip())
+        
+    elif command_type == "open_document_or_app":
+        target = command_text.replace("open ", "").strip()
+        
+        # Performance shortcut for known apps to avoid file scan I/O
+        standard_apps = ["calculator", "calc", "notepad", "vs code", "vscode", "visual studio code", "code", "chrome", "spotify"]
+        if target in standard_apps:
+            return app_commands.open_app(target)
+            
+        print("Document Intelligence Candidate")
+        result = file_commands.open_specific_file(target)
+        if result == file_commands.FILE_NOT_FOUND_SENTINEL:
+            return app_commands.open_app(target)
+        return result
         
     # --------------------------------
     # STUDY COMMANDS
