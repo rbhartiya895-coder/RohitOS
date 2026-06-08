@@ -3,3 +3,6 @@ SpeechRecognition
 pyttsx3
 python-dotenv
 PyPDF2
+uiautomation; sys_platform == 'win32'
+requests
+beautifulsoup4

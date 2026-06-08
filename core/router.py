@@ -4,7 +4,9 @@ from commands import file_commands
 from commands import web_commands
 from commands import search_commands
 from commands import study_commands
+from commands import browser_commands
 from core import memory
+from core import session
 from core import ai_engine
 from core.intent_understanding import normalize_intent
 
@@ -225,6 +227,32 @@ def detect_command(command_text):
         return "start_study_mode"
 
     # --------------------------------
+    # GENERIC CONTEXT COMMANDS
+    # --------------------------------
+    
+    if command_text in ["generic_key_points", "generic_summarize", "generic_make_notes"]:
+        return command_text
+
+    # --------------------------------
+    # BROWSER COMMANDS
+    # --------------------------------
+    
+    if command_text == "get website info":
+        return "get_website_info"
+    if command_text == "summarize page":
+        return "summarize_page"
+    if command_text == "get page key points":
+        return "get_page_key_points"
+    if command_text == "make_page_notes":
+        return "make_page_notes"
+    if command_text == "create ppt points":
+        return "create_ppt_points"
+    if command_text == "save article":
+        return "save_article"
+    if command_text == "show saved articles":
+        return "show_saved_articles"
+
+    # --------------------------------
     # SIMPLE INFO COMMANDS
     # --------------------------------
 
@@ -399,6 +427,59 @@ def route_command(command_text):
         
     elif command_type == "start_study_mode":
         return study_commands.start_study_mode()
+    # --------------------------------
+    # GENERIC CONTEXT COMMANDS
+    # --------------------------------
+    
+    elif command_type in ["generic_key_points", "generic_summarize", "generic_make_notes"]:
+        active = session.get_active_context_type()
+        if active == "browser":
+            # Treat as browser command
+            ok = browser_commands.get_current_page()
+            if not ok and not session.get_browser_context():
+                return "Please summarize a webpage first."
+                
+            if command_type == "generic_key_points":
+                return browser_commands.get_key_points()
+            elif command_type == "generic_summarize":
+                return browser_commands.summarize_page()
+            elif command_type == "generic_make_notes":
+                return browser_commands.make_notes()
+        else:
+            # Treat as document command
+            if command_type == "generic_key_points":
+                return study_commands.get_key_points()
+            elif command_type == "generic_summarize":
+                return study_commands.summarize_file()
+            elif command_type == "generic_make_notes":
+                return study_commands.create_revision_notes()
+
+    # --------------------------------
+    # BROWSER COMMANDS
+    # --------------------------------
+    
+    elif command_type in ["get_website_info", "summarize_page", "get_page_key_points", "make_page_notes", "create_ppt_points", "save_article"]:
+        # Update browser context before doing any browser commands
+        ok = browser_commands.get_current_page()
+        if not ok and not session.get_browser_context():
+            return "No browser page detected. Please open a webpage first."
+        
+        if command_type == "get_website_info":
+            return browser_commands.get_website_info()
+        elif command_type == "summarize_page":
+            return browser_commands.summarize_page()
+        elif command_type == "get_page_key_points":
+            return browser_commands.get_key_points()
+        elif command_type == "make_page_notes":
+            return browser_commands.make_notes()
+        elif command_type == "create_ppt_points":
+            return browser_commands.create_ppt_points()
+        elif command_type == "save_article":
+            return browser_commands.save_article()
+
+    elif command_type == "show_saved_articles":
+        return browser_commands.show_saved_articles()
+
     # --------------------------------
     # GOOGLE SEARCH
     # --------------------------------
