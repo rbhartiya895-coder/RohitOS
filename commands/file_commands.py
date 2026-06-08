@@ -156,7 +156,7 @@ def open_specific_file(command_text):
         filenames_no_ext = [os.path.splitext(os.path.basename(f))[0].lower() for f in all_files]
         
         # 1. Strict Match
-        strict_matches = difflib.get_close_matches(target_keyword, filenames_no_ext, n=1, cutoff=0.7)
+        strict_matches = difflib.get_close_matches(target_keyword, filenames_no_ext, n=1, cutoff=0.55)
         if strict_matches:
             best_name = strict_matches[0]
             best_match = next(f for f, n in zip(all_files, filenames_no_ext) if n == best_name)
