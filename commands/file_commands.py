@@ -3,6 +3,10 @@
 import os
 import shutil
 import stat
+import difflib
+import PyPDF2
+from collections import Counter
+import re
 from core import session
 
 
@@ -28,6 +32,37 @@ FILE_EXTENSIONS = {
     "image": [".jpg", ".png", ".jpeg"],
     "picture": [".jpg", ".png", ".jpeg"]
 }
+
+STOP_WORDS = {"the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for", "with", "by", "of", "is", "are", "was", "were", "be", "been", "this", "that", "it", "from", "as", "not", "no", "we", "you", "they", "i", "he", "she"}
+
+def _extract_pdf_keywords(filepath):
+    try:
+        text = ""
+        with open(filepath, "rb") as f:
+            reader = PyPDF2.PdfReader(f)
+            # Read first page only for extremely fast context extraction
+            if reader.pages:
+                text = reader.pages[0].extract_text() or ""
+        
+        # Clean text
+        words = re.findall(r'\b[A-Za-z]{4,}\b', text.lower())
+        words = [w for w in words if w not in STOP_WORDS]
+        
+        # Get top 5 most common long words
+        counts = Counter(words)
+        return [word for word, count in counts.most_common(5)]
+    except Exception:
+        return []
+
+def _track_and_open_file(filepath):
+    os.startfile(filepath)
+    session.update_last_file(filepath)
+    
+    if filepath.lower().endswith(".pdf"):
+        keywords = _extract_pdf_keywords(filepath)
+        if keywords:
+            session.store_document_keywords(filepath, keywords)
+            print(f"Extracted Keywords: {keywords}")
 
 # -----------------------------------
 # GET APPROVED FOLDERS
@@ -60,6 +95,13 @@ def open_system_folder(folder_name):
         
     return f"Could not find {folder_name} folder."
 
+def open_previous_document():
+    last_file = session.get_last_file()
+    if last_file and os.path.exists(last_file):
+        _track_and_open_file(last_file)
+        return f"Opening {os.path.basename(last_file)}."
+    return "No recent document found."
+
 # -----------------------------------
 # OPEN SPECIFIC FILE
 # -----------------------------------
@@ -69,8 +111,7 @@ def open_specific_file(command_text):
     if command_text in ["revision notes", "revision note"]:
         last_note = session.get_last_revision_note()
         if last_note and os.path.exists(last_note):
-            os.startfile(last_note)
-            session.update_last_file(last_note)
+            _track_and_open_file(last_note)
             return f"Opening {os.path.basename(last_note)}."
 
     target_ext = None
@@ -85,43 +126,45 @@ def open_specific_file(command_text):
     if not target_keyword:
         return "Please specify a file name."
         
-    # 1. Check Session Aliases First
+    # 1. Check Session Aliases First (Fuzzy)
     alias_path, matched_alias = session.get_document_alias(target_keyword)
     if alias_path and os.path.exists(alias_path):
-        os.startfile(alias_path)
-        session.update_last_file(alias_path)
-        print(f"Alias Used: {matched_alias}")
+        _track_and_open_file(alias_path)
+        print(f"Alias/Keyword Used: {matched_alias}")
         return f"Opening {os.path.basename(alias_path)}."
 
-    # 3. Search approved folders
-    matches = []
+    # 3. Search approved folders (Fuzzy Filename)
+    all_files = []
     for folder in _get_approved_folders():
         if not os.path.exists(folder):
             continue
         for root, dirs, files in os.walk(folder):
             depth = root.replace(folder, "").count(os.sep)
             if depth > 2:
-                dirs.clear()  # stop descending
+                dirs.clear()
                 continue
             for file in files:
-                # Better partial matching
                 file_lower = file.lower()
-                if target_keyword in file_lower or target_keyword.replace(" ", "_") in file_lower:
-                    if target_ext is None or file_lower.endswith(target_ext):
-                        matches.append(os.path.join(root, file))
+                if target_ext is None or file_lower.endswith(target_ext) or (isinstance(target_ext, list) and os.path.splitext(file_lower)[1] in target_ext):
+                    all_files.append(os.path.join(root, file))
                         
-    if matches:
-        # Open most recently modified match
-        matches.sort(key=lambda x: os.path.getmtime(x), reverse=True)
-        best_match = matches[0]
+    if all_files:
+        filenames_no_ext = [os.path.splitext(os.path.basename(f))[0].lower() for f in all_files]
+        matches = difflib.get_close_matches(target_keyword, filenames_no_ext, n=1, cutoff=0.4)
         
-        # Calculate a simple match ratio for debugging (percentage of match)
-        score = int((len(target_keyword) / len(os.path.basename(best_match))) * 100)
-        
-        os.startfile(best_match)
-        session.update_last_file(best_match)
-        print(f"Match Ratio: {score}%")
-        return f"Opening {os.path.basename(best_match)}."
+        if matches:
+            best_name = matches[0]
+            best_match = next(f for f, n in zip(all_files, filenames_no_ext) if n == best_name)
+            _track_and_open_file(best_match)
+            print(f"Fuzzy Filename Match Used: {matches[0]}")
+            return f"Opening {os.path.basename(best_match)}."
+            
+        # Fallback to simple substring
+        for f in all_files:
+            file_lower = os.path.basename(f).lower()
+            if target_keyword in file_lower or target_keyword.replace(" ", "_") in file_lower:
+                _track_and_open_file(f)
+                return f"Opening {os.path.basename(f)}."
         
     return f"Could not find a file matching '{target_keyword}'."
 
@@ -155,8 +198,7 @@ def open_latest_file(file_type):
                         
     if matches:
         matches.sort(key=lambda x: os.path.getmtime(x), reverse=True)
-        os.startfile(matches[0])
-        session.update_last_file(matches[0])
+        _track_and_open_file(matches[0])
         return f"Opening latest {file_type}."
         
     return f"No recent {file_type} files found."

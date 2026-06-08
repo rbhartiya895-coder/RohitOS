@@ -45,7 +45,11 @@ MAPPINGS = {
     "give me key points": "summarize file",
     "give me key points of this pdf": "summarize file",
     "create revision notes": "create revision notes",
-    "make study notes from this pdf": "create revision notes"
+    "make study notes from this pdf": "create revision notes",
+    "open the pdf i opened earlier": "open previous document",
+    "open the document i was reading": "open previous document",
+    "open previous document": "open previous document",
+    "open the pdf i was reading": "open previous document"
 }
 
 def normalize_intent(command_text):
