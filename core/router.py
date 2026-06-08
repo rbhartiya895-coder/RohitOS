@@ -93,6 +93,9 @@ def detect_command(command_text):
 
         if keyword in command_text:
             return "sleep_command"
+            
+    if command_text == "stop":
+        return "sleep_command"
 
     # --------------------------------
     # SHUTDOWN COMMANDS
@@ -101,14 +104,13 @@ def detect_command(command_text):
     shutdown_keywords = [
         "shutdown",
         "shut down",
-        "stop",
-        "exit",
-        "close yourself"
+        "exit rohitos",
+        "close rohitos"
     ]
 
     for keyword in shutdown_keywords:
 
-        if keyword in command_text:
+        if command_text == keyword or command_text.startswith(keyword):
             return "shutdown_command"
 
     # --------------------------------
@@ -197,7 +199,7 @@ def detect_command(command_text):
     if command_text.startswith("open latest "):
         return "open_latest_file"
         
-    if command_text == "open previous document":
+    if "previous document" in command_text or "document i was reading" in command_text or "pdf i opened earlier" in command_text or "pdf i was reading" in command_text:
         return "open_previous_document"
         
     for folder in KNOWN_FOLDERS:
@@ -228,6 +230,16 @@ def detect_command(command_text):
 
     if command_text in ["time", "what is the time"]:
         return "info_command"
+        
+    # --------------------------------
+    # MATH COMMANDS
+    # --------------------------------
+    
+    math_keywords = ["calculate", "what is", "plus", "minus", "times", "divided by", " x ", " + ", " - ", " / "]
+    if any(command_text.startswith(kw) for kw in ["calculate ", "what is "]) or any(char.isdigit() for char in command_text) and any(kw in command_text for kw in math_keywords):
+        # Additional check to ensure it's actually math and not just a text with numbers
+        if any(op in command_text for op in [" plus ", " minus ", " times ", " divided by ", " x ", "+", "-", "*", "/"]):
+            return "math_command"
 
     # --------------------------------
     # IDENTITY COMMANDS
@@ -624,6 +636,39 @@ def route_command(command_text):
         set_state(STOPPED)
 
         return "Shutting down RohitOS."
+
+    # --------------------------------
+    # MATH COMMANDS
+    # --------------------------------
+
+    elif command_type == "math_command":
+        import re
+        import ast
+        import operator as op
+        
+        expr = command_text.replace("calculate ", "").replace("what is ", "").strip()
+        expr = expr.replace("plus", "+").replace("minus", "-").replace("times", "*").replace(" x ", " * ").replace("divided by", "/")
+        expr = expr.replace(" and ", " + ") # "calculate X and Y" usually means add
+        
+        # Keep only math characters
+        safe_expr = re.sub(r'[^0-9\+\-\*\/\.\(\) ]', '', expr)
+        
+        _ops = {ast.Add: op.add, ast.Sub: op.sub, ast.Mult: op.mul, ast.Div: op.truediv}
+        def _safe_eval(node):
+            if isinstance(node, ast.Constant): return node.value
+            if isinstance(node, ast.BinOp):
+                return _ops[type(node.op)](_safe_eval(node.left), _safe_eval(node.right))
+            raise ValueError("Unsupported expression")
+            
+        try:
+            # Safe evaluation without eval()
+            result = _safe_eval(ast.parse(safe_expr, mode='eval').body)
+            # Format nicely
+            if isinstance(result, float) and result.is_integer():
+                result = int(result)
+            return f"The answer is {result}."
+        except Exception:
+            return "I couldn't calculate that."
 
     # --------------------------------
     # SIMPLE INFO COMMANDS
