@@ -49,11 +49,18 @@ MAPPINGS = {
     "open the pdf i opened earlier": "open previous document",
     "open the document i was reading": "open previous document",
     "open previous document": "open previous document",
-    "open the pdf i was reading": "open previous document"
+    "open the pdf i was reading": "open previous document",
+    "open document i was reading": "open previous document"
 }
 
 def normalize_intent(command_text):
     command_text = command_text.lower().strip()
+    
+    # Handle PDF open variants
+    if command_text.startswith("pdf open "):
+        command_text = command_text.replace("pdf open ", "open ", 1)
+    elif command_text.startswith("open pdf "):
+        command_text = command_text.replace("open pdf ", "open ", 1)
     
     # Iteratively strip prefixes in case of stacked fillers (e.g. "please can you")
     stripped_something = True

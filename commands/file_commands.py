@@ -15,6 +15,7 @@ from core import session
 # -----------------------------------
 
 WORKSPACE_PATH = "rohitos_workspace"
+FILE_NOT_FOUND_SENTINEL = "__FILE_NOT_FOUND__"
 
 # -----------------------------------
 # FILE EXTENSIONS
@@ -127,10 +128,13 @@ def open_specific_file(command_text):
         return "Please specify a file name."
         
     # 1. Check Session Aliases First (Fuzzy)
-    alias_path, matched_alias = session.get_document_alias(target_keyword)
+    alias_path, matched_alias, match_type = session.get_document_alias(target_keyword)
     if alias_path and os.path.exists(alias_path):
         _track_and_open_file(alias_path)
-        print(f"Alias/Keyword Used: {matched_alias}")
+        if match_type == "alias":
+            print(f"Matched Alias: {matched_alias}")
+        elif match_type == "keyword":
+            print(f"Matched Keywords: {matched_alias}")
         return f"Opening {os.path.basename(alias_path)}."
 
     # 3. Search approved folders (Fuzzy Filename)
@@ -150,23 +154,50 @@ def open_specific_file(command_text):
                         
     if all_files:
         filenames_no_ext = [os.path.splitext(os.path.basename(f))[0].lower() for f in all_files]
-        matches = difflib.get_close_matches(target_keyword, filenames_no_ext, n=1, cutoff=0.4)
         
-        if matches:
-            best_name = matches[0]
+        # 1. Strict Match
+        strict_matches = difflib.get_close_matches(target_keyword, filenames_no_ext, n=1, cutoff=0.7)
+        if strict_matches:
+            best_name = strict_matches[0]
             best_match = next(f for f, n in zip(all_files, filenames_no_ext) if n == best_name)
             _track_and_open_file(best_match)
-            print(f"Fuzzy Filename Match Used: {matches[0]}")
+            print(f"Matched Filename: {strict_matches[0]}")
             return f"Opening {os.path.basename(best_match)}."
             
-        # Fallback to simple substring
+        # 2. Substring Match
+        substring_matches = []
         for f in all_files:
             file_lower = os.path.basename(f).lower()
             if target_keyword in file_lower or target_keyword.replace(" ", "_") in file_lower:
-                _track_and_open_file(f)
-                return f"Opening {os.path.basename(f)}."
+                substring_matches.append(f)
+                
+        if len(substring_matches) == 1:
+            _track_and_open_file(substring_matches[0])
+            print(f"Matched Filename: {os.path.basename(substring_matches[0])}")
+            return f"Opening {os.path.basename(substring_matches[0])}."
+        elif len(substring_matches) > 1:
+            names = [os.path.basename(sm) for sm in substring_matches[:3]]
+            if len(names) == 2:
+                return f"Did you mean {names[0]} or {names[1]}?"
+            else:
+                return f"Did you mean {', '.join(names[:-1])}, or {names[-1]}?"
+            
+        # 3. Low Confidence Match (Suggestions)
+        low_conf_matches = difflib.get_close_matches(target_keyword, filenames_no_ext, n=3, cutoff=0.3)
+        if low_conf_matches:
+            names = []
+            for best_name in low_conf_matches:
+                best_match = next(f for f, n in zip(all_files, filenames_no_ext) if n == best_name)
+                names.append(os.path.basename(best_match))
+                
+            if len(names) == 1:
+                return f"Did you mean {names[0]}?"
+            elif len(names) == 2:
+                return f"Did you mean {names[0]} or {names[1]}?"
+            else:
+                return f"Did you mean {', '.join(names[:-1])}, or {names[-1]}?"
         
-    return f"Could not find a file matching '{target_keyword}'."
+    return FILE_NOT_FOUND_SENTINEL
 
 # -----------------------------------
 # OPEN LATEST FILE
