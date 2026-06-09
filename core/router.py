@@ -259,6 +259,9 @@ def detect_command(command_text):
     if command_text in ["time", "what is the time"]:
         return "info_command"
         
+    if command_text == "voice_status":
+        return "voice_status"
+        
     # --------------------------------
     # MATH COMMANDS
     # --------------------------------
@@ -759,6 +762,10 @@ def route_command(command_text):
 
         current_time = time.strftime("%I:%M %p")
         return f"The current time is {current_time}."
+
+    elif command_type == "voice_status":
+        import core.voice_router as voice_router
+        return voice_router.get_voice_status()
 
     # --------------------------------
     # IDENTITY COMMANDS

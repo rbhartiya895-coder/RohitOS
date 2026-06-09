@@ -71,6 +71,8 @@ MAPPINGS = {
     "explain this page": "summarize page",
     "give me key points of this page": "get page key points",
     "important facts": "get page key points",
+    "tell me keywords": "extract_keywords",
+    "voice status": "voice_status",
     "main takeaways": "get page key points",
     "give me keynotes": "get page key points",
     "keynotes": "get page key points",

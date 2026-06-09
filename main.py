@@ -4,8 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from voice.listen import listen
-from voice.speak import speak
+from core.voice_router import listen, speak
 from core.router import route_command
 from core.startup_manager import run_startup
 from core.runtime_states import (
