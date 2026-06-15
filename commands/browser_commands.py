@@ -58,9 +58,21 @@ def get_current_page():
         resp = requests.get(url, headers=headers, timeout=5)
         soup = BeautifulSoup(resp.text, 'html.parser')
         
-        # Remove scripts and styles
-        for script in soup(["script", "style", "nav", "footer", "header"]):
+        # Remove scripts, styles, and structural elements
+        for script in soup(["script", "style", "nav", "footer", "header", "aside"]):
             script.extract()
+            
+        # Advanced Content Cleaner: Remove cookies, privacy, ads, related content
+        noise_keywords = ['cookie', 'privacy', 'subscribe', 'advertisement', 'promo', 'footer', 'nav', 'related']
+        for element in soup.find_all(True):
+            if element.get('id'):
+                if any(n in element.get('id').lower() for n in noise_keywords):
+                    element.extract()
+                    continue
+            if element.get('class'):
+                classes = ' '.join(element.get('class')).lower()
+                if any(n in classes for n in noise_keywords):
+                    element.extract()
             
         text = soup.get_text(separator=' ', strip=True)
         # Limit text length
@@ -130,10 +142,16 @@ def summarize_page():
     if ctx.get("summary") and not _is_ai_failure(ctx.get("summary")):
         source = "Local Fallback Summary" if ctx.get("is_fallback") else "AI Summary"
         print(f"[Browser AI Cache HIT]\nCache Source:\n{source}")
+        
+        # Part 5: AI Cost Optimization - Reuse if key points exist
+        if ctx.get("key_points") and not _is_ai_failure(ctx.get("key_points")):
+            return f"{ctx['summary']}\n\nHere are the key points.\n{ctx['key_points']}"
+            
         return ctx["summary"]
         
     print("[Browser AI Cache MISS]\nCalling Gemini...")
-    prompt = f"Summarize this webpage content concisely in 2-3 sentences:\n\nTitle: {ctx['title']}\n\nContent:\n{ctx['text']}"
+    # Part 4: Better Spoken Summaries - Direct the AI to format key points
+    prompt = f"Summarize this webpage. Return the response strictly as:\nSummary: [1-2 sentences]\nKey Point 1: ...\nKey Point 2: ...\nKey Point 3: ...\n\nTitle: {ctx['title']}\n\nContent:\n{ctx['text']}"
     summary = ask_ai(prompt)
     
     keywords = _extract_local_keywords(ctx['text'])

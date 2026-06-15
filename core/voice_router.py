@@ -13,6 +13,8 @@ from voice.sarvam_tts import speak as sarvam_speak
 from voice.listen import listen as legacy_listen
 from voice.whisper_stt import listen as whisper_listen
 from voice.whisper_stt import get_whisper_model_info
+from core.runtime_states import print_ux_state
+from voice.speech_formatter import format_for_speech
 
 # Options: "sarvam", "legacy"
 VOICE_MODE = "sarvam"
@@ -22,6 +24,10 @@ STT_MODE = "legacy"
 
 def speak(text):
     global VOICE_MODE
+    
+    print_ux_state("Speaking")
+    
+    text = format_for_speech(text)
     
     if VOICE_MODE == "sarvam":
         try:

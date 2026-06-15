@@ -14,7 +14,8 @@ from core.runtime_states import (
     is_stopped,
     set_state,
     ACTIVE,
-    PROCESSING
+    PROCESSING,
+    print_ux_state
 )
 
 # -----------------------------------
@@ -59,6 +60,7 @@ while True:
 
             if command:
                 set_state(PROCESSING)
+                print_ux_state("Processing")
                 
                 response = route_command(command)
 
