@@ -1,4 +1,5 @@
 import speech_recognition as sr
+from core.runtime_states import print_ux_state
 
 import time
 
@@ -17,7 +18,8 @@ def listen(timeout=5):
         # print("Microphone Status: Initializing...")
         with sr.Microphone() as source:
             status = "Degraded" if is_degraded else "Active"
-            print(f"Listening Status: {status}")
+            state_str = "Listening (Degraded)" if is_degraded else "Listening"
+            print_ux_state(state_str)
             
             # Calibration and threshold adjustments for better capture
             recognizer.adjust_for_ambient_noise(source, duration=0.5)

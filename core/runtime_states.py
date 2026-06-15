@@ -36,3 +36,11 @@ def is_stopped():
 
 def state_name():
     return _current_state.upper()
+
+_last_ux_state = None
+
+def print_ux_state(state_str):
+    global _last_ux_state
+    if state_str != _last_ux_state:
+        print(f"\n[STATE] {state_str}")
+        _last_ux_state = state_str

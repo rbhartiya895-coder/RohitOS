@@ -4,6 +4,7 @@
 import speech_recognition as sr
 import time
 import numpy as np
+from core.runtime_states import print_ux_state
 
 # Global model instance
 whisper_model = None
@@ -40,7 +41,8 @@ def listen(timeout=5):
     try:
         with sr.Microphone() as source:
             status = "Degraded" if is_degraded else "Active"
-            print(f"Listening Status (Whisper): {status}")
+            state_str = "Listening (Whisper - Degraded)" if is_degraded else "Listening (Whisper)"
+            print_ux_state(state_str)
             
             # Calibration and threshold adjustments for better capture
             recognizer.adjust_for_ambient_noise(source, duration=0.5)

@@ -1,5 +1,7 @@
 # commands/study_commands.py
 import os
+import re
+from collections import Counter
 import PyPDF2
 from commands import file_commands
 from commands import app_commands
@@ -23,8 +25,27 @@ def _extract_text(filepath):
                     if page_text:
                         text += page_text + "\n"
                         
+            # Advanced PDF Content Cleaner: Remove headers, footers, watermarks, page numbers
+            raw_lines = text.split('\n')
+            
+            # First pass: Count frequencies to find repeating headers/footers
+            line_counts = Counter(line.strip() for line in raw_lines if line.strip())
+            
+            clean_lines = []
+            for line in raw_lines:
+                clean_line = line.strip()
+                if not clean_line:
+                    continue
+                # Remove standalone page numbers (e.g. "1", "1/10", "- 5 -")
+                if re.match(r'^[\-\s]*[\d/]+[\-\s]*$', clean_line):
+                    continue
+                # Remove repeating lines (appear > 2 times) like headers/watermarks
+                if line_counts[clean_line] > 2:
+                    continue
+                clean_lines.append(clean_line)
+                
             # Clean text to measure actual characters
-            cleaned_text = text.strip()
+            cleaned_text = "\n".join(clean_lines).strip()
             
             # Terminal logging
             print(f"Pages Scanned: {limit}/{num_pages}")
