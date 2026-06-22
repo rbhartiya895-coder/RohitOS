@@ -151,10 +151,24 @@ MAPPINGS = {
     # CONFIRMATION
     "yes": "confirm_yes",
     "yes yes": "confirm_yes",
-    "yas": "confirm_yes",
-    "yas yas": "confirm_yes",
+    "yep": "confirm_yes",
+    "yup": "confirm_yes",
+    "ok": "confirm_yes",
+    "okay": "confirm_yes",
+    "okay okay": "confirm_yes",
+    "sure": "confirm_yes",
+    "sure sure": "confirm_yes",
     "confirm": "confirm_yes",
-    "confirm confirm": "confirm_yes"
+    "confirmed": "confirm_yes",
+    "go ahead": "confirm_yes",
+    "go for it": "confirm_yes",
+    "yes please": "confirm_yes",
+    "please do": "confirm_yes",
+    "haan": "confirm_yes",
+    "haan haan": "confirm_yes",
+    "kar do": "confirm_yes",
+    "yas": "confirm_yes",
+    "yas yas": "confirm_yes"
 }
 
 def normalize_intent(command_text):
