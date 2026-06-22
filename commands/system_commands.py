@@ -69,3 +69,36 @@ def unmute():
         _press_key(VK_VOLUME_UP)
         _press_key(VK_VOLUME_DOWN)
     return "System audio restored."
+
+def get_volume():
+    if not PYCAW_AVAILABLE:
+        return "Cannot read volume without pycaw module."
+    vol = get_audio_volume()
+    if vol:
+        scalar = vol.GetMasterVolumeLevelScalar()
+        level = int(round(scalar * 100))
+        return f"Current volume is {level} percent."
+    return "Failed to get current volume."
+
+def set_volume(level):
+    if not PYCAW_AVAILABLE:
+        return "Cannot set exact volume without pycaw module."
+    level = max(0, min(100, int(level)))
+    vol = get_audio_volume()
+    if vol:
+        vol.SetMasterVolumeLevelScalar(level / 100.0, None)
+        return f"Volume set to {level} percent."
+    return "Failed to set volume."
+
+def change_volume_relative(amount):
+    if not PYCAW_AVAILABLE:
+        return "Cannot change volume relative without pycaw module."
+    vol = get_audio_volume()
+    if vol:
+        scalar = vol.GetMasterVolumeLevelScalar()
+        current = int(round(scalar * 100))
+        new_level = current + int(amount)
+        new_level = max(0, min(100, new_level))
+        vol.SetMasterVolumeLevelScalar(new_level / 100.0, None)
+        return f"Volume set to {new_level} percent."
+    return "Failed to change volume."
