@@ -82,11 +82,22 @@ def _get_approved_folders():
 # -----------------------------------
 def open_system_folder(folder_name):
     user_profile = os.environ.get("USERPROFILE", "")
+    onedrive_profile = os.path.join(user_profile, "OneDrive")
+    
+    def get_path(name):
+        standard = os.path.join(user_profile, name)
+        onedrive = os.path.join(onedrive_profile, name)
+        if os.path.exists(onedrive):
+            return onedrive
+        return standard
+
     folder_map = {
         "downloads": os.path.join(user_profile, "Downloads"),
-        "documents": os.path.join(user_profile, "Documents"),
-        "desktop": os.path.join(user_profile, "Desktop"),
-        "pictures": os.path.join(user_profile, "Pictures")
+        "documents": get_path("Documents"),
+        "desktop": get_path("Desktop"),
+        "pictures": get_path("Pictures"),
+        "videos": get_path("Videos"),
+        "music": get_path("Music")
     }
     
     path = folder_map.get(folder_name)
