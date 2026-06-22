@@ -144,6 +144,21 @@ def summarize_page():
     if not ctx:
         return "I cannot detect an active webpage to summarize."
         
+    text_lower = ctx.get('text', '').lower()
+    protection_phrases = [
+        "just a moment",
+        "enable javascript",
+        "enable cookies",
+        "verify you are human",
+        "cloudflare"
+    ]
+    
+    if any(phrase in text_lower for phrase in protection_phrases):
+        print("Page Type:\nProtected Page")
+        return "This website is blocking content extraction. Try opening the article directly or use browser control mode."
+        
+    print("Page Type:\nNormal Article")
+        
     if ctx.get("summary") and not _is_ai_failure(ctx.get("summary")):
         source = "Local Fallback Summary" if ctx.get("is_fallback") else "AI Summary"
         print(f"[Browser AI Cache HIT]\nCache Source:\n{source}")
@@ -175,6 +190,21 @@ def get_key_points():
     ctx = get_browser_context()
     if not ctx:
         return "I cannot detect an active webpage."
+        
+    text_lower = ctx.get('text', '').lower()
+    protection_phrases = [
+        "just a moment",
+        "enable javascript",
+        "enable cookies",
+        "verify you are human",
+        "cloudflare"
+    ]
+    
+    if any(phrase in text_lower for phrase in protection_phrases):
+        print("Page Type:\nProtected Page")
+        return "This website is blocking content extraction. Try opening the article directly or use browser control mode."
+        
+    print("Page Type:\nNormal Article")
         
     if ctx.get("key_points") and not _is_ai_failure(ctx.get("key_points")):
         source = "Local Fallback Summary" if ctx.get("is_fallback") else "AI Summary"
