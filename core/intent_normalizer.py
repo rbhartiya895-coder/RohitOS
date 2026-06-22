@@ -9,7 +9,11 @@ INTENT_ALIASES = {
         "is article ka summary do",
         "article ka summary do",
         "page summarize karo",
-        "summary batao"
+        "summary batao",
+        "article ke bare mein summary do",
+        "is article ki summary do",
+        "article summarize karo",
+        "article ka summary batao"
     ],
     "get_page_key_points": [
         "main points batao",
@@ -45,13 +49,19 @@ INTENT_ALIASES = {
     "open_calculator": [
         "calculator kholo",
         "calculator open karo",
-        "calculator chalu karo"
+        "calculator chalu karo",
+        "open calculator",
+        "open the calculator",
+        "start calculator"
     ],
     "open_browser": [
         "chrome kholo",
         "chrome open karo",
         "browser kholo",
-        "google kholo"
+        "google kholo",
+        "open chrome",
+        "open browser",
+        "launch chrome"
     ],
     "open_notepad": [
         "notepad kholo",
@@ -72,6 +82,12 @@ def normalize(command_text):
     text = re.sub(r'\bye\b', 'yeh', text)
     text = re.sub(r'\bbaare\b', 'bare', text)
     text = re.sub(r'\bke bare\b', 'kis bare', text)
+    text = re.sub(r'\bartical\b', 'article', text)
+    text = re.sub(r'\bsamri\b', 'summary', text)
+    text = re.sub(r'\bsummry\b', 'summary', text)
+    text = re.sub(r'\bcrate\b', 'create', text)
+    text = re.sub(r'\bbnao\b', 'banao', text)
+    text = re.sub(r'\bbnado\b', 'banao', text)
     
     # 1. Exact / Alias Matching
     for intent, aliases in INTENT_ALIASES.items():
