@@ -449,7 +449,7 @@ def route_command(command_text):
     elif command_type == "close_application":
         target = command_text.replace("close ", "").strip()
         result = app_commands.close_app(target)
-        if result == "Application not recognized":
+        if not result:
             return "Closing application is not yet configured."
         return result
         

@@ -133,7 +133,6 @@ def close_app(app_name):
         return msg
 
     else:
-
         msg = "Application not recognized"
         print(msg)
-        return msg
+        return None
