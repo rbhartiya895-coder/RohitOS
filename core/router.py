@@ -348,13 +348,24 @@ def strip_fillers(name):
 
 def route_command(command_text):
 
+    from core.intent_normalizer import normalize
+    original_cmd_log = command_text
     command_text = command_text.lower().strip()
-    command_text = normalize_intent(command_text)
-
-    command_type = detect_command(command_text)
-
-    print(f"Command Received: {command_text}")
-    print(f"Detected Type: {command_type}")
+    
+    # 1. Hindi/Hinglish Intent Normalization Layer
+    intent, modified_text = normalize(command_text)
+    
+    if intent:
+        command_type = intent
+        command_text = modified_text # standard english format for param extraction
+        print(f"Original Command: {original_cmd_log}")
+        print(f"Normalized Intent: {command_type}")
+    else:
+        # 2. Legacy English Intent Understanding
+        command_text = normalize_intent(command_text)
+        command_type = detect_command(command_text)
+        print(f"Command Received: {command_text}")
+        print(f"Detected Type: {command_type}")
 
     # --------------------------------
     # WEBSITE COMMANDS
@@ -422,6 +433,30 @@ def route_command(command_text):
             return app_commands.open_app(target)
         return result
         
+    # --------------------------------
+    # SPECIFIC APP / FILE COMMANDS (Day 19 Normalization)
+    # --------------------------------
+
+    elif command_type == "open_calculator":
+        return app_commands.open_app("calculator")
+        
+    elif command_type == "open_browser":
+        return app_commands.open_app("chrome")
+        
+    elif command_type == "open_notepad":
+        return app_commands.open_app("notepad")
+        
+    elif command_type == "close_application":
+        target = command_text.replace("close ", "").strip()
+        result = app_commands.close_app(target)
+        if result == "Application not recognized":
+            return "Closing application is not yet configured."
+        return result
+        
+    elif command_type == "open_notes_file":
+        target = command_text.replace("open ", "").replace("show ", "").strip()
+        return file_commands.open_specific_file(target)
+
     # --------------------------------
     # STUDY COMMANDS
     # --------------------------------
