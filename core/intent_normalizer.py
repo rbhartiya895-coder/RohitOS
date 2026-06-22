@@ -36,15 +36,65 @@ INTENT_ALIASES = {
         "article save karo",
         "page save karo"
     ],
-    "shutdown_command": [
-        "shutdown kar do",
-        "band ho jao",
-        "system band karo"
+    "system_shutdown": [
+        "shutdown laptop", "shutdown computer", "system band karo", "shutdown kar do"
     ],
-    "sleep_command": [
-        "sleep mode",
-        "so jao",
-        "sleep par jao"
+    "system_restart": [
+        "restart laptop", "restart computer", "system restart karo"
+    ],
+    "system_sleep": [
+        "sleep laptop", "sleep computer", "sleep mode", "so jao", "sleep par jao"
+    ],
+    "system_lock": [
+        "lock laptop", "lock computer", "system lock karo"
+    ],
+    "volume_up": [
+        "volume up", "volume badhao"
+    ],
+    "volume_down": [
+        "volume down", "volume kam karo"
+    ],
+    "volume_mute": [
+        "mute", "mute karo", "silent mode"
+    ],
+    "volume_unmute": [
+        "unmute", "sound wapas lao"
+    ],
+    "confirm_yes": [
+        "yes", "confirm", "haan"
+    ],
+    "open_gmail": [
+        "gmail kholo", "open gmail"
+    ],
+    "open_youtube": [
+        "youtube kholo", "open youtube"
+    ],
+    "open_chatgpt": [
+        "chatgpt kholo", "open chatgpt"
+    ],
+    "open_github": [
+        "github kholo", "open github"
+    ],
+    "open_google": [
+        "google kholo", "open google"
+    ],
+    "open_downloads": [
+        "downloads kholo", "open downloads"
+    ],
+    "open_desktop": [
+        "desktop kholo", "open desktop"
+    ],
+    "open_documents": [
+        "documents kholo", "open documents"
+    ],
+    "open_pictures": [
+        "pictures kholo", "open pictures"
+    ],
+    "open_videos": [
+        "videos kholo", "open videos"
+    ],
+    "open_music": [
+        "music kholo", "open music"
     ],
     "open_calculator": [
         "calculator kholo",

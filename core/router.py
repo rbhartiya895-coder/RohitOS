@@ -1,9 +1,12 @@
 import time
-from commands import app_commands
-from commands import file_commands
+from commands import web_launcher
 from commands import web_commands
 from commands import search_commands
+from commands import file_commands
+from commands import app_commands
 from commands import study_commands
+from commands import system_commands
+from core import system_state
 from commands import browser_commands
 from core import memory
 from core import session
@@ -452,6 +455,56 @@ def route_command(command_text):
     elif command_type == "open_notes_file":
         target = command_text.replace("open ", "").replace("show ", "").strip()
         return file_commands.open_specific_file(target)
+
+    # --------------------------------
+    # DAY 20: FOLDERS & WEBSITES
+    # --------------------------------
+    elif command_type.startswith("open_") and command_type in [
+        "open_downloads", "open_desktop", "open_documents", 
+        "open_pictures", "open_videos", "open_music"
+    ]:
+        folder_name = command_type.split("_")[1]
+        return file_commands.open_system_folder(folder_name)
+        
+    elif command_type.startswith("open_") and command_type in [
+        "open_gmail", "open_youtube", "open_chatgpt", 
+        "open_github", "open_google"
+    ]:
+        site_name = command_type.split("_")[1]
+        return web_launcher.open_website(site_name)
+
+    # --------------------------------
+    # DAY 20: VOLUME & SYSTEM
+    # --------------------------------
+    elif command_type == "volume_up":
+        return system_commands.volume_up()
+    elif command_type == "volume_down":
+        return system_commands.volume_down()
+    elif command_type == "volume_mute":
+        return system_commands.mute()
+    elif command_type == "volume_unmute":
+        return system_commands.unmute()
+        
+    elif command_type in ["system_shutdown", "system_restart", "system_sleep"]:
+        system_state.set_pending_system_action(command_type)
+        return "Are you sure?"
+        
+    elif command_type == "confirm_yes":
+        pending = system_state.get_pending_system_action()
+        if not pending:
+            return "Pending action expired or not found."
+            
+        system_state.clear_pending_system_action()
+        
+        if pending == "system_shutdown":
+            return system_commands.shutdown_computer()
+        elif pending == "system_restart":
+            return system_commands.restart_computer()
+        elif pending == "system_sleep":
+            return system_commands.sleep_computer()
+            
+    elif command_type == "system_lock":
+        return system_commands.lock_computer()
 
     # --------------------------------
     # STUDY COMMANDS
