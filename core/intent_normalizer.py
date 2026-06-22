@@ -192,5 +192,27 @@ def normalize(command_text):
     set_vol_match = re.search(r'^(?:set\s+volume\s+to|volume|set\s+sound\s+to|awaaz)\s*(\d+)(?:\s*percent|%)?(?:\s*karo)?$', text)
     if set_vol_match:
         return f"set_volume_{set_vol_match.group(1)}", text
+        
+    # 5. Brightness Parameterized Matching
+    if text in ["what is the brightness", "current brightness", "brightness status", "brightness kitni hai"]:
+        return "get_brightness", text
+        
+    if text in ["brightness up", "increase brightness", "brightness badhao"]:
+        return "brightness_up", text
+        
+    if text in ["brightness down", "decrease brightness", "brightness kam karo"]:
+        return "brightness_down", text
+        
+    set_bright_match = re.search(r'^(?:set\s+brightness\s+to|brightness)\s*(\d+)(?:\s*percent|%)?(?:\s*karo)?$', text)
+    if set_bright_match:
+        return f"set_brightness_{set_bright_match.group(1)}", text
+        
+    # 6. Generic App Opening
+    app_open_match = re.search(r'^(?:open|launch|start)\s+(.+)$', text)
+    if app_open_match:
+        # Avoid generic file matching "open my files" or existing hardcoded commands
+        app = app_open_match.group(1)
+        if app not in ["calculator", "youtube", "downloads", "documents", "desktop", "pictures", "music", "chrome", "browser", "notepad"]:
+            return f"open_any_application_{app}", text
                 
     return None, command_text

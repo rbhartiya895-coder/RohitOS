@@ -8,6 +8,13 @@ except ImportError:
     PYCAW_AVAILABLE = False
     print("Warning: pycaw not installed. Volume mute will use fallback.")
 
+try:
+    import screen_brightness_control as sbc
+    SBC_AVAILABLE = True
+except ImportError:
+    SBC_AVAILABLE = False
+    print("Warning: screen-brightness-control not installed. Brightness controls will use fallback.")
+
 VK_VOLUME_MUTE = 0xAD
 VK_VOLUME_DOWN = 0xAE
 VK_VOLUME_UP = 0xAF
@@ -102,3 +109,48 @@ def change_volume_relative(amount):
         vol.SetMasterVolumeLevelScalar(new_level / 100.0, None)
         return f"Volume set to {new_level} percent."
     return "Failed to change volume."
+
+# --------------------------------
+# BRIGHTNESS CONTROL
+# --------------------------------
+
+def get_brightness():
+    if not SBC_AVAILABLE:
+        return "Brightness control is not supported on this display."
+    try:
+        current = sbc.get_brightness()[0]
+        return f"Current brightness is {current} percent."
+    except Exception:
+        return "Brightness control is not supported on this display."
+
+def set_brightness(level):
+    if not SBC_AVAILABLE:
+        return "Brightness control is not supported on this display."
+    try:
+        level = max(0, min(100, int(level)))
+        sbc.set_brightness(level)
+        return f"Brightness set to {level} percent."
+    except Exception:
+        return "Brightness control is not supported on this display."
+
+def brightness_up():
+    if not SBC_AVAILABLE:
+        return "Brightness control is not supported on this display."
+    try:
+        current = sbc.get_brightness()[0]
+        new_level = min(100, current + 10)
+        sbc.set_brightness(new_level)
+        return f"Brightness increased to {new_level} percent."
+    except Exception:
+        return "Brightness control is not supported on this display."
+
+def brightness_down():
+    if not SBC_AVAILABLE:
+        return "Brightness control is not supported on this display."
+    try:
+        current = sbc.get_brightness()[0]
+        new_level = max(0, current - 10)
+        sbc.set_brightness(new_level)
+        return f"Brightness decreased to {new_level} percent."
+    except Exception:
+        return "Brightness control is not supported on this display."

@@ -102,9 +102,13 @@ def open_system_folder(folder_name):
     
     path = folder_map.get(folder_name)
     
+    print(f"Folder Path: {path}")
+    
     exists = False
     if path:
         exists = os.path.exists(path)
+        
+    print(f"Exists: {exists}")
     
     if path and exists:
         os.startfile(path)

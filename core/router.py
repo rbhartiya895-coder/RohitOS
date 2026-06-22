@@ -6,6 +6,7 @@ from commands import file_commands
 from commands import app_commands
 from commands import study_commands
 from commands import system_commands
+from commands import app_launcher
 from core import system_state
 from commands import browser_commands
 from core import memory
@@ -484,6 +485,15 @@ def route_command(command_text):
     ]:
         site_name = command_type.split("_")[1]
         return web_launcher.open_website(site_name)
+        
+    elif command_type.startswith("open_any_application_"):
+        app_name = command_type.replace("open_any_application_", "")
+        result = app_launcher.open_application(app_name)
+        if result:
+            print(f"Matched Application: {app_name} -> {result}")
+            return f"Opening {app_name.capitalize()}."
+        else:
+            return f"I couldn't find {app_name.capitalize()} installed."
 
     # --------------------------------
     # DAY 20: VOLUME & SYSTEM
@@ -504,6 +514,16 @@ def route_command(command_text):
     elif command_type.startswith("change_volume_relative_"):
         amount = command_type.replace("change_volume_relative_", "")
         return system_commands.change_volume_relative(amount)
+        
+    elif command_type == "brightness_up":
+        return system_commands.brightness_up()
+    elif command_type == "brightness_down":
+        return system_commands.brightness_down()
+    elif command_type == "get_brightness":
+        return system_commands.get_brightness()
+    elif command_type.startswith("set_brightness_"):
+        level = command_type.split("_")[2]
+        return system_commands.set_brightness(level)
         
     elif command_type in ["system_shutdown", "system_restart", "system_sleep"]:
         system_state.set_pending_system_action(command_type)
