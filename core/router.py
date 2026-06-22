@@ -211,6 +211,9 @@ def detect_command(command_text):
     if command_text.startswith("open ") and any(keyword in command_text for keyword in FILE_KEYWORDS):
         return "open_specific_file"
         
+    if command_text.startswith("show ") and " notes" in command_text:
+        return "open_specific_file"
+        
     if command_text.startswith("open "):
         return "open_document_or_app"
 
@@ -239,7 +242,7 @@ def detect_command(command_text):
     
     if command_text == "get website info":
         return "get_website_info"
-    if command_text == "summarize page":
+    if command_text in ["summarize page", "read summary", "read cached summary"]:
         return "summarize_page"
     if command_text == "get page key points":
         return "get_page_key_points"
@@ -251,6 +254,12 @@ def detect_command(command_text):
         return "save_article"
     if command_text == "show saved articles":
         return "show_saved_articles"
+    if command_text.startswith("confirm delete ") and command_text != "confirm delete folder" and command_text != "confirm delete file":
+        return "confirm_delete_saved_article"
+        
+    if command_text.startswith("delete ") and command_text != "delete file" and command_text != "delete folder":
+        if not command_text.startswith("delete file ") and not command_text.startswith("delete folder "):
+            return "request_delete_saved_article"
 
     # --------------------------------
     # SIMPLE INFO COMMANDS
@@ -482,6 +491,14 @@ def route_command(command_text):
 
     elif command_type == "show_saved_articles":
         return browser_commands.show_saved_articles()
+            
+    elif command_type == "request_delete_saved_article":
+        target = command_text.replace("delete ", "").strip()
+        return f"Are you sure you want to delete '{target}'? Say 'confirm delete {target}' to proceed."
+        
+    elif command_type == "confirm_delete_saved_article":
+        target = command_text.replace("confirm delete ", "").strip()
+        return browser_commands.delete_saved_article(target)
 
     # --------------------------------
     # GOOGLE SEARCH

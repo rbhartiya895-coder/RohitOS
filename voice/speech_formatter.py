@@ -7,6 +7,17 @@ def format_for_speech(text):
     # 1. Replace URLs with a brief mention
     text = re.sub(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', 'link removed for brevity', text)
     
+    # 1.5 Humanize filenames
+    def _humanize(match):
+        name = match.group(0)
+        name = re.sub(r'\.[a-zA-Z0-9]+$', '', name) # Remove extension
+        name = re.sub(r'_notes$', ' Notes', name, flags=re.IGNORECASE)
+        name = name.replace('_', ' ')
+        name = re.sub(r'\s+', ' ', name).strip()
+        return name.title()
+        
+    text = re.sub(r'\b[\w\-_]+\.(?:pdf|txt|docx|pptx|doc|ppt)\b', _humanize, text, flags=re.IGNORECASE)
+    
     # 2. Convert markdown bold/italics (but keep the text)
     text = re.sub(r'\*\*(.*?)\*\*', r'\1', text)
     text = re.sub(r'\*(.*?)\*', r'\1', text)
@@ -29,7 +40,7 @@ def format_for_speech(text):
             if not in_list:
                 in_list = True
                 # Only prepend if not already stated
-                if not any("here are the key points" in l.lower() for l in formatted_lines[-3:]):
+                if not any("here are the key points" in l.lower() for l in formatted_lines[-5:]):
                     formatted_lines.append("Here are the key points.")
             # Remove the bullet symbol and ensure it ends with punctuation
             content = re.sub(r'^[\•\-\*]\s+', '', clean_line).strip()
@@ -45,4 +56,17 @@ def format_for_speech(text):
     final_text = " ".join(formatted_lines)
     final_text = re.sub(r'\s+', ' ', final_text).strip()
     
+    # 7. Hotfix: Sarvam 500 char limit. Hard limit to 450.
+    if len(final_text) > 450:
+        truncated = final_text[:450]
+        # Find the last sentence boundary
+        match = None
+        for m in re.finditer(r'[.!?](?:\s|$)', truncated):
+            match = m
+            
+        if match:
+            final_text = truncated[:match.end()].strip()
+        else:
+            final_text = truncated.strip() + "..."
+            
     return final_text
