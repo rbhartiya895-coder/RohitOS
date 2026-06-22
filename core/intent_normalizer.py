@@ -133,6 +133,6 @@ def normalize(command_text):
         
         if target:
             canonical = f"close {target}"
-            return "close_application", canonical
+            return "close_app", canonical
                 
     return None, command_text

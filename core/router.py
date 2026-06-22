@@ -391,7 +391,10 @@ def route_command(command_text):
             ""
         ).strip()
 
-        return app_commands.close_app(app_name)
+        result = app_commands.close_app(app_name)
+        if not result:
+            return "Closing application is not yet configured."
+        return result
         
     # --------------------------------
     # SYSTEM FOLDERS
@@ -445,13 +448,6 @@ def route_command(command_text):
         
     elif command_type == "open_notepad":
         return app_commands.open_app("notepad")
-        
-    elif command_type == "close_application":
-        target = command_text.replace("close ", "").strip()
-        result = app_commands.close_app(target)
-        if not result:
-            return "Closing application is not yet configured."
-        return result
         
     elif command_type == "open_notes_file":
         target = command_text.replace("open ", "").replace("show ", "").strip()

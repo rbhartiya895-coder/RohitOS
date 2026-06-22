@@ -132,6 +132,18 @@ def close_app(app_name):
         print(msg)
         return msg
 
+    # CLOSE CHROME
+    elif "chrome" in app_name or "browser" in app_name:
+        
+        status = os.system("taskkill /f /im chrome.exe")
+        if status == 0:
+            msg = "Closed Chrome successfully."
+        else:
+            msg = "Chrome is not currently running."
+            
+        print(msg)
+        return msg
+
     else:
         msg = "Application not recognized"
         print(msg)
