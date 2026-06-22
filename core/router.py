@@ -496,6 +496,14 @@ def route_command(command_text):
         return system_commands.mute()
     elif command_type == "volume_unmute":
         return system_commands.unmute()
+    elif command_type == "get_volume":
+        return system_commands.get_volume()
+    elif command_type.startswith("set_volume_"):
+        level = command_type.split("_")[2]
+        return system_commands.set_volume(level)
+    elif command_type.startswith("change_volume_relative_"):
+        amount = command_type.replace("change_volume_relative_", "")
+        return system_commands.change_volume_relative(amount)
         
     elif command_type in ["system_shutdown", "system_restart", "system_sleep"]:
         system_state.set_pending_system_action(command_type)

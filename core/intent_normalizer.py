@@ -176,5 +176,21 @@ def normalize(command_text):
         if target:
             canonical = f"close {target}"
             return "close_app", canonical
+            
+    # 4. Volume Parameterized Matching
+    if text in ["what is the volume", "current volume", "volume status", "sound level", "volume kitna hai"]:
+        return "get_volume", text
+        
+    inc_match = re.search(r'^(?:increase\s+volume(?:\s+by)?|volume\s+badhao|awaaz\s+badhao)\s*(\d+)(?:\s*percent|%)?$', text)
+    if inc_match:
+        return f"change_volume_relative_{inc_match.group(1)}", text
+        
+    dec_match = re.search(r'^(?:decrease\s+volume(?:\s+by)?|volume\s+kam\s+karo|awaaz\s+kam\s+karo)\s*(\d+)(?:\s*percent|%)?$', text)
+    if dec_match:
+        return f"change_volume_relative_-{dec_match.group(1)}", text
+        
+    set_vol_match = re.search(r'^(?:set\s+volume\s+to|volume|set\s+sound\s+to|awaaz)\s*(\d+)(?:\s*percent|%)?(?:\s*karo)?$', text)
+    if set_vol_match:
+        return f"set_volume_{set_vol_match.group(1)}", text
                 
     return None, command_text
