@@ -78,7 +78,7 @@ def summarize_file():
     print("AI Invocation: YES")
     print("Generating summary...")
     text_capped = text[:3000]  # Cap input tokens for safe API usage
-    prompt = f"Summarize the following document and provide a short 2-3 sentence overview:\n\n{text_capped}"
+    prompt = f"Summarize the following document. Return the response strictly as:\nSummary: [1-2 sentences]\nKey Point 1: ...\nKey Point 2: ...\nKey Point 3: ...\n\nContent:\n{text_capped}"
     
     try:
         response = ai_engine.ask_ai(prompt)
@@ -106,19 +106,20 @@ def summarize_file():
         key_lines = [line for line in lines if len(line) > 50][:4]
         
         # 4. Present concise bullet points
-        fallback = "Cloud AI unavailable.\nUsing local summary mode.\n\n"
-        fallback += f"Document Type: {doc_type}\n\n"
-        fallback += "Key Information:\n\n"
+        parts = []
         
-        for h in headings:
-            fallback += f"* {h}\n"
+        # Make the summary slightly more informative
+        first_line = ""
+        if key_lines:
+            first_line = " " + key_lines[0].split('.')[0] + "."
+        parts.append(f"Summary: This is a {doc_type}.{first_line}")
+        
+        # Add key points, capped at 3
+        for i, h in enumerate(headings[:3]):
+            clean_h = h.rstrip('.')
+            parts.append(f"Key Point {i+1}: {clean_h}.")
             
-        for k in key_lines:
-            # Just take the first few words of key lines to keep it concise
-            words = k.split()[:7]
-            fallback += f"* {' '.join(words)}...\n"
-            
-        return fallback.strip()
+        return "\n".join(parts)
 
 def get_key_points():
     filepath = session.get_last_file()

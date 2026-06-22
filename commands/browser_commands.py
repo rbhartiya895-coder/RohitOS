@@ -118,20 +118,25 @@ def _generate_local_key_points(summary):
 def _get_local_summary(ctx):
     title = ctx.get('title', '')
     headings = ctx.get('headings', [])
-    keywords = ctx.get('keywords', [])
-    
-    parts = []
-    parts.append(f"Title: {title}")
-    if headings:
-        parts.append(f"Headings: {', '.join(headings[:3])}")
-    if keywords:
-        parts.append(f"Keywords: {', '.join(keywords)}")
-        
     text = ctx.get('text', '')
-    first_para = ". ".join(text.split('.')[:3]).strip()
-    if first_para:
-        parts.append(f"Summary: {first_para}.")
-        
+    
+    first_para = ". ".join(text.split('.')[:2]).strip()
+    if not first_para:
+        first_para = title
+    
+    parts = [f"Summary: {first_para}."]
+    
+    if headings:
+        for i, h in enumerate(headings[:3]):
+            clean_h = h.rstrip('.')
+            parts.append(f"Key Point {i+1}: {clean_h}.")
+    else:
+        # Fallback if no headings
+        sentences = [s.strip() for s in text.split('.') if len(s.strip()) > 30]
+        for i, s in enumerate(sentences[1:4]):
+            clean_s = s.rstrip('.')
+            parts.append(f"Key Point {i+1}: {clean_s}.")
+            
     return "\n".join(parts)
 
 def summarize_page():
@@ -179,9 +184,9 @@ def get_key_points():
     if ctx.get("summary") and not _is_ai_failure(ctx.get("summary")):
         source = "Local Fallback Summary" if ctx.get("is_fallback") else "AI Summary"
         print(f"[Browser AI Cache HIT]\nCache Source:\n{source}")
-        key_points = _generate_local_key_points(ctx["summary"])
-        update_browser_cache_keys({"key_points": key_points})
-        return key_points
+        # The summary itself already contains structured Key Points
+        update_browser_cache_keys({"key_points": ctx["summary"]})
+        return ctx["summary"]
         
     print("[Browser AI Cache MISS]\nCalling Gemini...")
     prompt = f"Extract 3 to 5 key points from this webpage as a bulleted list:\n\nTitle: {ctx['title']}\n\nContent:\n{ctx['text']}"
@@ -293,11 +298,35 @@ def show_saved_articles():
         if not articles:
             return "You have no saved articles."
             
-        output = []
-        for i, article in enumerate(articles, 1):
-            title = article.get("title", "Unknown Article")
-            output.append(f"{i}. {title}")
+        output = "Here are your saved articles:\n\n"
+        for idx, art in enumerate(articles):
+            output += f"{idx+1}. {art.get('title', 'Unknown')} ({art.get('domain', 'Unknown')})\n"
             
-        return "\n".join(output)
+        return output
     except Exception as e:
-        return "Error reading saved articles."
+        return f"Failed to load saved articles: {e}"
+
+def delete_saved_article(target):
+    saved_file = os.path.join("data", "saved_articles.json")
+    if not os.path.exists(saved_file):
+        return "You have no saved articles."
+        
+    try:
+        with open(saved_file, "r", encoding="utf-8") as f:
+            articles = json.load(f)
+            
+        initial_count = len(articles)
+        target_lower = target.lower()
+        
+        # Filter out the article
+        articles = [a for a in articles if target_lower not in a.get("title", "").lower()]
+        
+        if len(articles) == initial_count:
+            return f"I couldn't find a saved article matching {target}."
+            
+        with open(saved_file, "w", encoding="utf-8") as f:
+            json.dump(articles, f, indent=4)
+            
+        return f"Deleted the saved article."
+    except Exception as e:
+        return f"Failed to delete article: {e}"
