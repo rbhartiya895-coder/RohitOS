@@ -101,11 +101,16 @@ def open_system_folder(folder_name):
     }
     
     path = folder_map.get(folder_name)
-    if path and os.path.exists(path):
+    
+    exists = False
+    if path:
+        exists = os.path.exists(path)
+    
+    if path and exists:
         os.startfile(path)
         return f"Opening {folder_name} folder."
         
-    return f"Could not find {folder_name} folder."
+    return f"{folder_name.capitalize()} folder not found."
 
 def open_previous_document():
     last_file = session.get_last_file()

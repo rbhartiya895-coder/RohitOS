@@ -251,6 +251,18 @@ def detect_command(command_text):
         return "get_page_key_points"
     if command_text == "make_page_notes":
         return "make_page_notes"
+        
+    # --------------------------------
+    # EXPLICIT INTENTS (From English layer)
+    # --------------------------------
+    if command_text in [
+        "system_lock", "system_sleep", "system_restart", "system_shutdown",
+        "volume_up", "volume_down", "volume_mute", "volume_unmute", "confirm_yes",
+        "open_gmail", "open_youtube", "open_chatgpt", "open_github", "open_google",
+        "open_downloads", "open_desktop", "open_documents", "open_pictures", "open_videos", "open_music",
+        "open_calculator", "open_browser", "open_notepad"
+    ]:
+        return command_text
     if command_text == "create ppt points":
         return "create_ppt_points"
     if command_text == "save article":

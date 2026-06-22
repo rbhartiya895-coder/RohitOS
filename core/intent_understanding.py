@@ -15,19 +15,20 @@ SUFFIXES = [" for me", " right now"]
 
 # 3. Lightweight Intent Mappings (Deterministic)
 MAPPINGS = {
-    "calculator": "open calculator",
-    "youtube": "open youtube",
-    "download": "open downloads",
-    "downloads": "open downloads",
-    "download folder": "open downloads",
-    "downloads folder": "open downloads",
-    "my download folder": "open downloads",
-    "my downloads folder": "open downloads",
-    "open download": "open downloads",
-    "documents": "open documents",
-    "desktop": "open desktop",
-    "pictures": "open pictures",
-    "my downloads": "open downloads",
+    "calculator": "open_calculator",
+    "youtube": "open_youtube",
+    "download": "open_downloads",
+    "downloads": "open_downloads",
+    "download folder": "open_downloads",
+    "downloads folder": "open_downloads",
+    "my download folder": "open_downloads",
+    "my downloads folder": "open_downloads",
+    "open download": "open_downloads",
+    "open download folder": "open_downloads",
+    "documents": "open_documents",
+    "desktop": "open_desktop",
+    "pictures": "open_pictures",
+    "my downloads": "open_downloads",
     "show my recent files": "show recent files",
     "my recent files": "show recent files",
     "recent files": "show recent files",
@@ -100,7 +101,60 @@ MAPPINGS = {
     "show saved articles": "show saved articles",
     "list saved articles": "show saved articles",
     "what articles have i saved": "show saved articles",
-    "saved articles": "show saved articles"
+    "saved articles": "show saved articles",
+
+    # SYSTEM CONTROLS
+    "lock laptop": "system_lock",
+    "lock computer": "system_lock",
+    "sleep laptop": "system_sleep",
+    "sleep computer": "system_sleep",
+    "sleep mode": "system_sleep",
+    "restart laptop": "system_restart",
+    "restart computer": "system_restart",
+    "shutdown laptop": "system_shutdown",
+    "shutdown computer": "system_shutdown",
+    
+    # VOLUME CONTROLS
+    "volume up": "volume_up",
+    "volume down": "volume_down",
+    "mute": "volume_mute",
+    "unmute": "volume_unmute",
+    
+    # FOLDERS & WEBSITES
+    "open gmail": "open_gmail",
+    "open youtube": "open_youtube",
+    "open chatgpt": "open_chatgpt",
+    "open chat gpt": "open_chatgpt",
+    "open chat g p t": "open_chatgpt",
+    "open gpt": "open_chatgpt",
+    "open 6th gpt": "open_chatgpt",
+    "open chat jeepity": "open_chatgpt",
+    "open github": "open_github",
+    "open google": "open_google",
+    "open downloads": "open_downloads",
+    "open desktop": "open_desktop",
+    "open documents": "open_documents",
+    "open pictures": "open_pictures",
+    "open videos": "open_videos",
+    "open music": "open_music",
+    
+    # SYSTEM APPS
+    "open calculator": "open_calculator",
+    "open the calculator": "open_calculator",
+    "start calculator": "open_calculator",
+    "open chrome": "open_browser",
+    "open browser": "open_browser",
+    "open the browser": "open_browser",
+    "launch chrome": "open_browser",
+    "open notepad": "open_notepad",
+    
+    # CONFIRMATION
+    "yes": "confirm_yes",
+    "yes yes": "confirm_yes",
+    "yas": "confirm_yes",
+    "yas yas": "confirm_yes",
+    "confirm": "confirm_yes",
+    "confirm confirm": "confirm_yes"
 }
 
 def normalize_intent(command_text):

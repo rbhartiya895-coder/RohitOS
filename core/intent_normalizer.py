@@ -37,85 +37,77 @@ INTENT_ALIASES = {
         "page save karo"
     ],
     "system_shutdown": [
-        "shutdown laptop", "shutdown computer", "system band karo", "shutdown kar do"
+        "system band karo", "shutdown kar do", "band ho jao"
     ],
     "system_restart": [
-        "restart laptop", "restart computer", "system restart karo"
+        "system restart karo"
     ],
     "system_sleep": [
-        "sleep laptop", "sleep computer", "sleep mode", "so jao", "sleep par jao"
+        "sleep mode", "so jao", "sleep par jao"
     ],
     "system_lock": [
-        "lock laptop", "lock computer", "system lock karo"
+        "system lock karo"
     ],
     "volume_up": [
-        "volume up", "volume badhao"
+        "volume badhao"
     ],
     "volume_down": [
-        "volume down", "volume kam karo"
+        "volume kam karo"
     ],
     "volume_mute": [
-        "mute", "mute karo", "silent mode"
+        "mute karo", "silent mode"
     ],
     "volume_unmute": [
-        "unmute", "sound wapas lao"
+        "sound wapas lao"
     ],
     "confirm_yes": [
-        "yes", "confirm", "haan"
+        "haan", "haan haan", "yes yes", "yas", "yas yas", "confirm confirm"
     ],
     "open_gmail": [
-        "gmail kholo", "open gmail"
+        "gmail kholo"
     ],
     "open_youtube": [
-        "youtube kholo", "open youtube"
+        "youtube kholo"
     ],
     "open_chatgpt": [
-        "chatgpt kholo", "open chatgpt"
+        "chatgpt kholo", "chat gpt kholo", "chat g p t kholo", "gpt kholo", "6th gpt kholo", "chat jeepity kholo"
     ],
     "open_github": [
-        "github kholo", "open github"
+        "github kholo"
     ],
     "open_google": [
-        "google kholo", "open google"
+        "google kholo"
     ],
     "open_downloads": [
-        "downloads kholo", "open downloads"
+        "downloads kholo", "download kholo", "download folder kholo"
     ],
     "open_desktop": [
-        "desktop kholo", "open desktop"
+        "desktop kholo"
     ],
     "open_documents": [
-        "documents kholo", "open documents"
+        "documents kholo"
     ],
     "open_pictures": [
-        "pictures kholo", "open pictures"
+        "pictures kholo"
     ],
     "open_videos": [
-        "videos kholo", "open videos"
+        "videos kholo"
     ],
     "open_music": [
-        "music kholo", "open music"
+        "music kholo"
     ],
     "open_calculator": [
         "calculator kholo",
         "calculator open karo",
-        "calculator chalu karo",
-        "open calculator",
-        "open the calculator",
-        "start calculator"
+        "calculator chalu karo"
     ],
     "open_browser": [
         "chrome kholo",
         "chrome open karo",
-        "browser kholo",
-        "google kholo",
-        "open chrome",
-        "open browser",
-        "launch chrome"
+        "browser kholo"
     ],
     "open_notepad": [
         "notepad kholo",
-        "notes kholo",
         "notepad open karo"
     ]
 }
@@ -145,14 +137,14 @@ def normalize(command_text):
             return intent, text
             
     # 2. Fuzzy / Parameterized Matching for "open" operations
-    # Example: "show shahrukh notes", "aadhaar card kholo"
+    # Example: "aadhaar card kholo"
     open_fillers = [
         r"^mera\s+", r"^mere\s+", r"\s+kholo$", r"\s+dikhao$", 
-        r"\s+open karo$", r"^open\s+", r"^show\s+", r"\s+card$"
+        r"\s+open karo$", r"\s+card$"
     ]
     
     is_open = False
-    if "kholo" in text or "dikhao" in text or "open karo" in text or text.startswith("show ") or text.startswith("open "):
+    if "kholo" in text or "dikhao" in text or "open karo" in text:
         is_open = True
         
     if is_open:
