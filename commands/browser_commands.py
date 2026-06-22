@@ -242,7 +242,9 @@ def make_notes():
         prompt = f"Create structured study notes from this webpage:\n\nTitle: {ctx['title']}\n\nContent:\n{ctx['text']}"
         notes = ask_ai(prompt)
         if _is_ai_failure(notes):
-            return "Cloud AI unavailable. I cannot generate notes right now."
+            print("Cloud AI unavailable.\nUsing local notes fallback.")
+            local_summary = _get_local_summary(ctx)
+            notes = f"Topic: {ctx['title']}\n\n{local_summary}"
         
     # Save notes
     notes_dir = os.path.join("rohitos_workspace", "notes")
