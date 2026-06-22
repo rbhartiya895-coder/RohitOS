@@ -8,10 +8,12 @@ from core.runtime_states import print_ux_state
 
 # Global model instance
 whisper_model = None
-WHISPER_MODEL_SIZE = "base"
+WHISPER_MODEL_SIZE = "base.en"
 
 consecutive_failures = 0
 is_degraded = False
+DIAGNOSTICS = False  # Set True for debugging only
+DEBUG_STT = False  # Set True to show calibration threshold values
 recognizer = sr.Recognizer()
 
 def init_whisper():
@@ -44,14 +46,34 @@ def listen(timeout=5):
             state_str = "Listening (Whisper - Degraded)" if is_degraded else "Listening (Whisper)"
             print_ux_state(state_str)
             
-            # Calibration and threshold adjustments for better capture
-            recognizer.adjust_for_ambient_noise(source, duration=0.5)
+            # One-time calibration at startup (Option A)
+            if not getattr(recognizer, 'is_calibrated', False):
+                if DEBUG_STT:
+                    print("\n[STT] Calibrating microphone... Please remain quiet for 1 second.")
+                recognizer.adjust_for_ambient_noise(source, duration=1.0)
+                raw_threshold = recognizer.energy_threshold
+                clamped_threshold = max(150, min(3000, raw_threshold))
+                recognizer.energy_threshold = clamped_threshold
+                
+                recognizer.dynamic_energy_threshold = False
+                recognizer.is_calibrated = True
+                if DEBUG_STT:
+                    print(f"[STT] Calibration complete.")
+                    print(f"      Raw threshold: {raw_threshold:.2f}")
+                    print(f"      Adjusted threshold: {clamped_threshold:.2f}")
+                
             recognizer.pause_threshold = 1.5
             recognizer.non_speaking_duration = 0.5
             
             try:
                 # Increased phrase_time_limit so sentences aren't cut off midway
+                if DIAGNOSTICS:
+                    print("[DIAGNOSTICS] Waiting for audio start...")
                 audio = recognizer.listen(source, timeout=timeout, phrase_time_limit=10)
+                if DIAGNOSTICS:
+                    print("[DIAGNOSTICS] Audio capture ended!")
+                    audio_dur = len(audio.frame_data) / (audio.sample_rate * audio.sample_width)
+                    print(f"[DIAGNOSTICS] Captured audio duration: {audio_dur:.2f}s")
             except sr.WaitTimeoutError:
                 return ""
                 
