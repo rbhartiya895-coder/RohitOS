@@ -1,8 +1,30 @@
+# Python
 __pycache__/
 *.pyc
-.env
+
+# Virtual environments
+.venv/
 venv/
+
+# Environment variables
+.env
+
+# Workspace
 rohitos_workspace/
+
+# User data (don't commit personal memory)
 data/memory.json
 data/session.json
+
+# Generated audio
+data/temp_tts.wav
+data/temp_tts-*.wav
+
+# Logs
+*.log
+
+# Temporary review files
 diff_review.txt
+
+# Backup copies
+BACKUP_COPIES/
